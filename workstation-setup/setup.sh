@@ -128,8 +128,8 @@ echo "Docs: (https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-configure.htm
 echo "============================================="
 
 # Post installation messages
-echo "============================================="
 echo "Installation of Terraform, Ansible, Docker, Docker Compose, and AWS CLI is complete."
 echo "Please log out and log back in to apply Docker group changes. Or open a new shell via: su - \$USER"
+echo ""
 echo "In the ../terraform/ directory run: terraform init, to initilize Terraform"
 echo "============================================="
