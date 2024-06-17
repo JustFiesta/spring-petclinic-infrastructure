@@ -42,10 +42,10 @@ if ! check_command terraform; then
     echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
     # Update package information
-    sudo apt update
+    sudo apt update -y > /dev/null
 
     # Install Terraform
-    sudo apt-get install terraform
+    sudo apt-get install terraform > /dev/null
 
     # Verify installation
     tf_version=$(terraform -v)
@@ -63,7 +63,7 @@ echo "============================================="
 if ! check_command ansible; then
     echo "Installing Ansible..."
 
-    sudo apt-get install -y ansible
+    sudo apt-get install -y ansible > /dev/null
 
     # Verify installation
     ansible_version=$(ansible --version)
@@ -95,10 +95,10 @@ if ! check_command docker; then
     sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     # Update packages and repositories
-    sudo apt-get update -y
+    sudo apt-get update -y > /dev/null
 
     # Install Docker with Compose plugin
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-pluginelse
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-pluginelse > /dev/null
 
     # Verify installation
     docker_version=$(docker -v)
@@ -120,7 +120,7 @@ echo "============================================="
 if ! check_command aws; then
     echo "Installing AWS CLI..."
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-    unzip awscliv2.zip
+    unzip awscliv2.zip > /dev/null
     sudo ./aws/install
     rm awscliv2.zip
     rm -rf aws/
