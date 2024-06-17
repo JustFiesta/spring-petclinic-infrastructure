@@ -25,3 +25,13 @@ This repository contains automation of insfrastructure deployment for spring-pet
     ```
 
 3. Add execute premissions
+
+    ```bash
+    chmod +x ./setup.sh
+    ```
+
+4. Run script as superuser (for apt install)
+
+    ```bash
+    sudo ./setup.sh
+    ```
