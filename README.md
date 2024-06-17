@@ -35,3 +35,10 @@ This repository contains automation of insfrastructure deployment for spring-pet
     ```bash
     sudo ./setup.sh
     ```
+
+5. Initilize terraform with S3 backend
+
+    ```bash
+    cd ./terraform
+    terraform init -backend-config=backend.tf
+    ```
