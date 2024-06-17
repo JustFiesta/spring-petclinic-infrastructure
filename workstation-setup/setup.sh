@@ -1,4 +1,4 @@
-#!/usr/share/env bash
+#!/usr/bin/env bash
 #--------------------
 # This script installs basic components for capstone project workstation (Ubuntu)
 # Installs: AWS CLI, Ansible, Terraform, Docker
