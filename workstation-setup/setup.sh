@@ -48,14 +48,11 @@ if ! check_command terraform; then
     sudo apt-get install terraform > /dev/null
 
     # Verify installation
-    tf_version=$(terraform -v)
-    if [[ -n $tf_version ]]; then
+    if command -v terraform &> /dev/null; then
         echo "Terraform installation was unsuccessfull - please proceed manually (https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)"
     else
         echo "Terraform installed succesfully"
     fi
-else
-    echo "Terraform is already installed."
 fi
 echo "============================================="
 
@@ -66,14 +63,11 @@ if ! check_command ansible; then
     sudo apt-get install -y ansible > /dev/null
 
     # Verify installation
-    ansible_version=$(ansible --version)
-    if [[ -n $ansible_version ]]; then
+    if command -v ansible &> /dev/null; then
         echo "Ansible installation was unsuccessfull - please proceed manually (https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)"
     else
         echo "Ansible installed succesfully"
     fi
-else
-    echo "Ansible is already installed."
 fi
 echo "============================================="
 
@@ -89,26 +83,20 @@ if ! check_command docker; then
     sudo chmod a+r /etc/apt/keyrings/docker.asc
 
     # Add Docker repository
-    echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     # Update packages and repositories
     sudo apt-get update -y > /dev/null
 
     # Install Docker with Compose plugin
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-pluginelse > /dev/null
+    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin > /dev/null
 
     # Verify installation
-    docker_version=$(docker -v)
-    if [[ -n $docker_version ]]; then
-        echo "Docker installation was unsuccessfull - please proceed manually (https://docs.docker.com/engine/install/)"
+    if command -v docker &> /dev/null; then
+        echo "Docker installed successfully"
     else
-        echo "Docker installed succesfully"
+        echo "Docker installation was unsuccessful - please proceed manually (https://docs.docker.com/engine/install/)"
     fi
-else
-    echo "Docker is already installed."
 fi
 
 # Post Docker install steps
@@ -126,14 +114,11 @@ if ! check_command aws; then
     rm -rf aws/
 
     # Verify installation
-    aws_version=$(aws --version)
-    if [[ -n $aws_version ]]; then
+    if command -v aws &> /dev/null; then
         echo "AWS CLI installation was unsuccessfull - please proceed manually (https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions)"
     else
         echo "AWS CLI installed succesfully"
     fi
-else
-    echo "AWS CLI is already installed."
 fi
 echo "============================================="
 
