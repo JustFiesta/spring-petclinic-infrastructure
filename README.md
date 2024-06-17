@@ -5,7 +5,7 @@ This repository contains automation of insfrastructure deployment for spring-pet
 ## Tools used
 
 * Bash scripts - install tools on workstation
-* Terraform - provise AWS infrastructure for app
+* Terraform - provide AWS infrastructure for app
 * Ansible - configure EC2 instances
 
 <hr>
