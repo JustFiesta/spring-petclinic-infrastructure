@@ -19,6 +19,7 @@ function check_command {
 
 # Script - start
 # Update packages and install needed ones
+echo "============================================="
 sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install -y curl gnupg software-properties-common unzip
@@ -27,6 +28,7 @@ sudo apt-get install -y curl gnupg software-properties-common unzip
 cd ~
 
 # Install Terraform
+echo "============================================="
 if ! check_command terraform; then
     echo "Installing Terraform..."
 
@@ -55,6 +57,7 @@ if ! check_command terraform; then
 else
     echo "Terraform is already installed."
 fi
+echo "============================================="
 
 # Install Ansible
 if ! check_command ansible; then
@@ -72,6 +75,7 @@ if ! check_command ansible; then
 else
     echo "Ansible is already installed."
 fi
+echo "============================================="
 
 # Install Docker
 if ! check_command docker; then
@@ -110,6 +114,7 @@ fi
 # Post Docker install steps
 sudo groupadd docker
 sudo usermod -aG docker "$USER"
+echo "============================================="
 
 # Install AWS CLI
 if ! check_command aws; then
@@ -130,12 +135,16 @@ if ! check_command aws; then
 else
     echo "AWS CLI is already installed."
 fi
+echo "============================================="
 
 # Configure AWS CLI
 echo "Before proceeding please configure AWS CLI with: aws configure"
 echo "Docs: (https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-configure.html)"
+echo "============================================="
 
 # Post installation messages
+echo "============================================="
 echo "Installation of Terraform, Ansible, Docker, Docker Compose, and AWS CLI is complete."
 echo "Please log out and log back in to apply Docker group changes. Or open a new shell via: su - \$USER"
 echo "In the ../terraform/ directory run: terraform init, to initilize Terraform"
+echo "============================================="
