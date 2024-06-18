@@ -3,7 +3,7 @@ resource "aws_vpc" "this" {
     cidr_block        = "${var.vpc_cidr}"
 }
 
-# Create subnets
+# Create subnets (public, private)
 resource "aws_subnet" "public" {
     vpc_id            = aws_vpc.this.id
     cidr_block        = "${var.public_sub}"
@@ -23,6 +23,7 @@ resource "aws_subnet" "private" {
     }
 }
 
+# Create internet gateway for public subnet
 resource "aws_internet_gateway" "gw" {
     vpc_id            = aws_vpc.this.id
         tags = {
@@ -30,6 +31,7 @@ resource "aws_internet_gateway" "gw" {
     }
 }
 
+# Create NAT Gataway for private subnet
 resource "aws_nat_gateway" "nat" {
     allocation_id = aws_eip.nat.id
     subnet_id     = aws_subnet.public.id
@@ -38,10 +40,12 @@ resource "aws_nat_gateway" "nat" {
     }
 }
 
+# Create IP for NAT Gataway
 resource "aws_eip" "nat" {
     vpc = true
 }
 
+# Create route tables
 resource "aws_route_table" "public" {
     vpc_id = aws_vpc.this.id
     route {
@@ -74,6 +78,7 @@ resource "aws_route_table_association" "private" {
     route_table_id = aws_route_table.private.id
 }
 
+# Create security groups (allow: ssh - private, http - app)
 resource "aws_security_group" "http" {
     name_prefix = "app_sg"
     vpc_id      = aws_vpc.this.id
@@ -96,7 +101,6 @@ resource "aws_security_group" "http" {
         Name = "capstone_http"
     }
 }
-
 
 resource "aws_security_group" "ssh" {
     name_prefix = "ssh_sg"
