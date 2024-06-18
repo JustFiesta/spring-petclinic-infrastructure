@@ -25,7 +25,7 @@ resource "aws_subnet" "private" {
 
 resource "aws_internet_gateway" "gw" {
     vpc_id            = aws_vpc.this.id
-        ags = {
+        tags = {
         Name = "capstone_igw_gateway"
     }
 }
