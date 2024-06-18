@@ -36,7 +36,16 @@ This repository contains automation of insfrastructure deployment for spring-pet
     sudo ./setup.sh
     ```
 
-5. Initilize terraform with S3 backend
+5. Export Terraform enviroment variables
+
+    ```bash
+    export TF_VAR_aws_access_key=<access_key_value>
+    export TF_VAR_aws_secret_key=<secret_key_value>
+    export TF_VAR_db_username=<username_value>     
+    export TF_VAR_db_password=<password_value>
+    ```
+
+6. Initilize terraform with S3 backend
 
     ```bash
     cd ./terraform
