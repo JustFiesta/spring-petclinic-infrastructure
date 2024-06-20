@@ -6,13 +6,13 @@ pipeline {
         AWS_CREDENTIALS=credentials('mbocak-credentials')
     }
 
-    stages{
+    stages {
         stage('Checkout scm') {
             steps {
                 checkout scm
             }
         }
-        
+
         stage('Terraform init') {
             steps {
                 dir('terraform') {
@@ -37,30 +37,32 @@ pipeline {
             }
         }
 
+        stage('Terraform scan') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform fmt -check -no-color'
+                }
+            }
+        }
+
         stage('Terraform plan') {
             steps {
                 dir('terraform') {
-                    sh 'terraform plan -no-color'
+                    sh 'terraform plan --auto-approve -out=tfplan -no-color'
                 }
             }
         }
 
         stage('Terraform apply') {
-            when {
-                expression { return params.ACTION == 'Apply' }
-            }
             steps {
                 input message: 'Apply new changes?', ok: 'Apply'
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
-                    sh 'terraform apply --auto-approve -no-color'
+                    sh 'terraform apply -no-color tfplan'
                 }
             }
         }
 
         stage('Terraform destroy') {
-            when {
-                expression { return params.ACTION == 'Destroy' }
-            }
             steps {
                 input message: 'Want to destroy resources?', ok: 'Destroy'
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
