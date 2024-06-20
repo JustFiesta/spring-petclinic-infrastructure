@@ -9,25 +9,33 @@ pipeline {
         }
         stage('Terraform init') {
             steps {
-                sh 'cd terraform/'
-                sh 'terraform init'
+                dir('terraform') {
+                    sh 'terraform init'
+                }
             }
         }
+
         stage('Terraform format') {
             steps {
-                sh 'terraform fmt'
+                dir('terraform') {
+                    sh 'terraform fmt'
+                }
             }
         }
 
         stage('Terraform validate') {
             steps {
-                sh 'terraform validate'
+                dir('terraform') {
+                    sh 'terraform validate'
+                }
             }
         }
 
         stage('Terraform plan') {
             steps {
-                sh 'terraform plan'
+                dir('terraform') {
+                    sh 'terraform plan'
+                }
             }
         }
 
