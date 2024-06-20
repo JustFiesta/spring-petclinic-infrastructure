@@ -52,7 +52,7 @@ pipeline {
         stage('Terraform plan') {
             steps {
                 dir('terraform') {
-                    sh 'terraform plan --auto-approve -out=tfplan -no-color'
+                    sh 'terraform plan -out=tfplan -no-color'
                 }
             }
         }
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 input message: 'Apply new changes?', ok: 'Apply'
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
-                    sh 'terraform apply -no-color tfplan'
+                    sh 'terraform apply -auto-approve -no-color tfplan'
                 }
             }
         }
@@ -76,7 +76,7 @@ pipeline {
             steps {
                 input message: 'Want to destroy resources?', ok: 'Destroy'
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
-                    sh 'terraform destroy --auto-approve -no-color'
+                    sh 'terraform destroy -auto-approve -no-color'
                 }
             }
         }
