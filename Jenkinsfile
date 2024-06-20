@@ -5,6 +5,15 @@ pipeline {
         AWS_DEFAULT_REGION="eu-west-1"
         AWS_CREDENTIALS=credentials('mbocak-credentials')
     }
+    
+    parameters {
+        choice(
+            name: 'ACTION',
+            choices: ['Apply', 'Destroy'],
+            defaultValue: 'Apply',
+            description: 'Choose whether to apply or destroy the infrastructure'
+        )
+    }
 
     stages{
         stage('Checkout scm') {
@@ -46,16 +55,26 @@ pipeline {
         }
 
         stage('Terraform apply') {
+            when {
+                expression { return params.ACTION == 'Apply' }
+            }
             steps {
-                input message: 'Czy na pewno chcesz zastosować zmiany?', ok: 'Zastosuj'
-                sh 'terraform apply --auto-approve -no-color'
+                input message: 'Apply new changes?', ok: 'Apply'
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
+                    sh 'terraform apply --auto-approve -no-color'
+                }
             }
         }
 
         stage('Terraform destroy') {
+            when {
+                expression { return params.ACTION == 'Destroy' }
+            }
             steps {
-                input message: 'Czy na pewno chcesz zniszczyć zasoby?', ok: 'Zniszcz'
-                sh 'terraform destroy --auto-approve -no-color'
+                input message: 'Want to destroy resources?', ok: 'Destroy'
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
+                    sh 'terraform destroy --auto-approve -no-color'
+                }
             }
         }
     }
