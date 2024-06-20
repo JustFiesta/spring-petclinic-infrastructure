@@ -59,7 +59,10 @@ pipeline {
 
         stage('Terraform apply') {
             when {
-                expression { return params.ACTION == 'Apply' }
+                allOf {
+                    expression { return params.ACTION != null }
+                    expression { return params.ACTION == 'Apply' }
+                }
             }
             steps {
                 input message: 'Apply new changes?', ok: 'Apply'
@@ -71,7 +74,10 @@ pipeline {
 
         stage('Terraform destroy') {
             when {
-                expression { return params.ACTION == 'Destroy' }
+                allOf {
+                    expression { return params.ACTION != null }
+                    expression { return params.ACTION == 'Apply' }
+                }
             }
             steps {
                 input message: 'Want to destroy resources?', ok: 'Destroy'
