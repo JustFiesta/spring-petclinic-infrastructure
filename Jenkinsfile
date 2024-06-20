@@ -5,14 +5,6 @@ pipeline {
         AWS_DEFAULT_REGION="eu-west-1"
         AWS_CREDENTIALS=credentials('mbocak-credentials')
     }
-    
-    parameters {
-        choice(
-            name: 'ACTION',
-            choices: ['Apply', 'Destroy'],
-            description: 'Choose whether to apply or destroy the infrastructure'
-        )
-    }
 
     stages{
         stage('Checkout scm') {
