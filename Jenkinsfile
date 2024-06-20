@@ -6,6 +6,10 @@ pipeline {
         AWS_CREDENTIALS=credentials('mbocak-credentials')
     }
 
+    parameters {
+        choice(name: 'ACTION', choices: ['Apply', 'Destroy'], description: 'Choose the action to perform')
+    }
+
     stages {
         stage('Checkout scm') {
             steps {
@@ -54,6 +58,9 @@ pipeline {
         }
 
         stage('Terraform apply') {
+            when {
+                expression { return params.ACTION == 'Apply' }
+            }
             steps {
                 input message: 'Apply new changes?', ok: 'Apply'
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
@@ -63,6 +70,9 @@ pipeline {
         }
 
         stage('Terraform destroy') {
+            when {
+                expression { return params.ACTION == 'Destroy' }
+            }
             steps {
                 input message: 'Want to destroy resources?', ok: 'Destroy'
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
