@@ -25,6 +25,7 @@ module "network" {
      source = "./modules/network"
 }
 
+/*
 module "database" {
     source = "./modules/database"
 
@@ -43,3 +44,4 @@ module "compute" {
 
     depends_on   = [module.network]
 }
+*/
