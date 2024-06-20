@@ -60,8 +60,8 @@ pipeline {
         stage('Terraform apply') {
             when {
                 allOf {
-                    expression { return params.ACTION != null }
-                    expression { return params.ACTION == 'Apply' }
+                    expression { params.ACTION != null }
+                    expression { params.ACTION == 'Apply' }
                 }
             }
             steps {
@@ -75,8 +75,8 @@ pipeline {
         stage('Terraform destroy') {
             when {
                 allOf {
-                    expression { return params.ACTION != null }
-                    expression { return params.ACTION == 'Apply' }
+                    expression { params.ACTION != null }
+                    expression { params.ACTION == 'Apply' }
                 }
             }
             steps {
