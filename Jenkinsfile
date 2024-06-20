@@ -1,17 +1,15 @@
 pipeline {
     agent any
 
-    environment {
-
-    }
-
-    tools {
-        
-    }
-    
     stages{
+        stage('Checkout scm') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Terraform init') {
             steps {
+                sh 'cd terraform/'
                 sh 'terraform init'
             }
         }
