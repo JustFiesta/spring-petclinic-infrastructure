@@ -10,7 +10,6 @@ pipeline {
         choice(
             name: 'ACTION',
             choices: ['Apply', 'Destroy'],
-            defaultValue: 'Apply',
             description: 'Choose whether to apply or destroy the infrastructure'
         )
     }
