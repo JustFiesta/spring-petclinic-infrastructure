@@ -7,10 +7,11 @@ pipeline {
                 checkout scm
             }
         }
+        
         stage('Terraform init') {
             steps {
                 dir('terraform') {
-                    sh 'terraform init'
+                    sh 'terraform init -no-color'
                 }
             }
         }
@@ -18,7 +19,7 @@ pipeline {
         stage('Terraform format') {
             steps {
                 dir('terraform') {
-                    sh 'terraform fmt'
+                    sh 'terraform fmt -no-color'
                 }
             }
         }
@@ -26,7 +27,7 @@ pipeline {
         stage('Terraform validate') {
             steps {
                 dir('terraform') {
-                    sh 'terraform validate'
+                    sh 'terraform validate -no-color'
                 }
             }
         }
@@ -34,7 +35,7 @@ pipeline {
         stage('Terraform plan') {
             steps {
                 dir('terraform') {
-                    sh 'terraform plan'
+                    sh 'terraform plan -no-color'
                 }
             }
         }
@@ -42,14 +43,14 @@ pipeline {
         stage('Terraform apply') {
             steps {
                 input message: 'Czy na pewno chcesz zastosować zmiany?', ok: 'Zastosuj'
-                sh 'terraform apply --auto-approve'
+                sh 'terraform apply --auto-approve -no-color'
             }
         }
 
         stage('Terraform destroy') {
             steps {
                 input message: 'Czy na pewno chcesz zniszczyć zasoby?', ok: 'Zniszcz'
-                sh 'terraform destroy --auto-approve'
+                sh 'terraform destroy --auto-approve -no-color'
             }
         }
     }
