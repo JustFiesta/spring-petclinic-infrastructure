@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        AWS_DEFAULT_REGION="eu-west-1"
+        AWS_CREDENTIALS=credentials('mbocak-credentials')
+    }
+
     stages{
         stage('Checkout scm') {
             steps {
