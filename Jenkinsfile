@@ -11,6 +11,11 @@ pipeline {
     }
 
     stages {
+        stage('Check ACTION status') {
+            steps {
+                echo "${ACTION}"
+            }
+        }
         stage('Checkout scm') {
             steps {
                 checkout scm
