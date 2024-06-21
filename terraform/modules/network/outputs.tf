@@ -17,3 +17,7 @@ output "http_sec_group" {
 output "ssh_sec_group" {
     value = aws_security_group.ssh.id
 }
+
+output "jeknins_sec_group" {
+    value = aws_security_group.jenkins.id
+}
