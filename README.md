@@ -51,3 +51,48 @@ This repository contains automation of insfrastructure deployment for spring-pet
     cd ./terraform
     terraform init -backend-config=backend.tf
     ```
+
+<hr>
+
+## Project Elements
+
+### Workstation
+
+Workstation for testing Terraform, Ansible and Docker.
+
+### Infrastructure build server
+
+Jenkins server inside default VPC, with its own IP and opened ports: 22, and 8080.
+
+This instance can apply or destroy incoming changes to terraform configured AWS infrastructure.
+
+#### Encountered problems
+
+1. Credentials for AWS CLI in Jenkins
+
+This bothered me for few hours. I could not run any terraform operation in Jenkins controll unit for `spring-petclinic-infrastructure`. Initially I thought it was Terraform problem.
+
+Steps I made to fix it:
+
+* install terraform on ec2 and point Jenkins to its binary installation folder.
+* install aws cli on controll unit (it did not help at all).
+* check if Jenkins sees credentials.
+* set enviroment variables inside Jenkins pipeline so every agent can use AWS credentials.
+
+Had to create credentials in Jenkins control unit, and after that set AWS enviroment variables (region and credentials) like so:
+
+```bash
+    environment {
+        AWS_DEFAULT_REGION="eu-west-1"
+        AWS_CREDENTIALS=credentials('mbocak-credentials')
+    }
+```
+
+2. Confitionals based on choice parameters
+
+Choice parameters when sent via Webhook do not ci
+ontain any value, so FIRST one is used by default.
+
+Had to change parameters layout a bit.
+
+### 
