@@ -147,3 +147,49 @@ resource "aws_security_group" "jenkins" {
         Name = "capstone_jenkins"
     }
 }
+
+# Create Application Load Balancer
+resource "aws_lb" "app" {
+    name               = "capstone-alb"
+    internal           = false
+    load_balancer_type = "application"
+    security_groups    = [aws_security_group.http.id]
+    subnets            = [aws_subnet.public.id]
+
+    tags = {
+        Name = "capstone_alb"
+    }
+}
+
+# Create Target Group
+resource "aws_lb_target_group" "app" {
+    name     = "capstone-targets"
+    port     = "${var.alb_port}"
+    protocol = "HTTP"
+    vpc_id   = aws_vpc.this.id
+
+    health_check {
+        path                = "/"
+        interval            = 30
+        timeout             = 5
+        healthy_threshold   = 2
+        unhealthy_threshold = 2
+        matcher             = "200-299"
+    }
+
+    tags = {
+        Name = "capstone_target_group"
+    }
+}
+
+# Create Listener
+resource "aws_lb_listener" "app" {
+    load_balancer_arn = aws_lb.app.arn
+    port              = "${var.alb_port}"
+    protocol          = "HTTP"
+
+    default_action {
+        type             = "forward"
+        target_group_arn = aws_lb_target_group.app.arn
+    }
+}
