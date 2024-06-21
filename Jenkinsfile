@@ -7,15 +7,11 @@ pipeline {
     }
 
     parameters {
-        choice(name: 'ACTION', choices: ['Apply', 'Destroy'], description: 'Choose the action to perform')
+        choice(name: 'ACTION', choices: ['Check', 'Apply', 'Destroy'], description: 'Choose the action to perform')
     }
 
     stages {
-        stage('Check ACTION status') {
-            steps {
-                echo "${ACTION}"
-            }
-        }
+
         stage('Checkout scm') {
             steps {
                 checkout scm
@@ -64,10 +60,7 @@ pipeline {
 
         stage('Terraform apply') {
             when {
-                allOf {
-                    expression { params.ACTION != null }
-                    expression { params.ACTION == 'Apply' }
-                }
+                expression { params.ACTION == 'Apply' }
             }
             steps {
                 input message: 'Apply new changes?', ok: 'Apply'
@@ -79,10 +72,7 @@ pipeline {
 
         stage('Terraform destroy') {
             when {
-                allOf {
-                    expression { params.ACTION != null }
-                    expression { params.ACTION == 'Apply' }
-                }
+                expression { params.ACTION == 'Destroy' }
             }
             steps {
                 input message: 'Want to destroy resources?', ok: 'Destroy'
