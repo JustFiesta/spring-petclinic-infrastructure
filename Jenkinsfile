@@ -53,7 +53,7 @@ pipeline {
         stage('Terraform plan') {
             steps {
                 dir('terraform') {
-                    sh 'terraform plan -out=tfplan -no-color'
+                    sh 'terraform plan -no-color'
                 }
             }
         }
@@ -65,7 +65,7 @@ pipeline {
             steps {
                 input message: 'Apply new changes?', ok: 'Apply'
                 withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
-                    sh 'terraform apply -auto-approve -no-color tfplan'
+                    sh 'terraform apply -auto-approve -no-color'
                 }
             }
         }
