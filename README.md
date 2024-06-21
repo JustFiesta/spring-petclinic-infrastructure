@@ -58,13 +58,17 @@ This repository contains automation of insfrastructure deployment for spring-pet
 
 ### Workstation
 
-Workstation for testing Terraform, Ansible and Docker.
+Workstation inside default VPC, with its own IP and opened ports: 22.
+
+It is made for testing Terraform, Ansible and Docker.
+
+<hr>
 
 ### Infrastructure build server
 
 Jenkins server inside default VPC, with its own IP and opened ports: 22, and 8080.
 
-This instance can apply or destroy incoming changes to terraform configured AWS infrastructure.
+This instance can apply or destroy incoming changes to Terraform configured AWS infrastructure.
 
 #### Encountered problems
 
@@ -88,11 +92,28 @@ Had to create credentials in Jenkins control unit, and after that set AWS enviro
     }
 ```
 
-2. Confitionals based on choice parameters
+2. Conditionals based on choice parameters
 
-Choice parameters when sent via Webhook do not ci
-ontain any value, so FIRST one is used by default.
+Choice parameters when sent via Webhook do not contain any value, so FIRST one is used by default.
 
-Had to change parameters layout a bit.
+Had to change parameters layout a bit, so neither `Apply` or `Destroy` are taken first.
 
-### 
+<hr>
+
+### Infrastructure provisioning (Terraform)
+
+Terraform is used to provide infrastructure.
+
+Its files are stored in terraform/ catalog and are splitted into modules (`network` - vpc, sec. groups, alb, etc.; `compute` - app VM, Jenkins VM; `database` - RDB for app).
+
+Each modules uses variables specified by use (network/variables.tf) or given from other modules output (compute, database). They contain: ports, sec. group ids, subnet ids, AMI id, etc.
+
+#### Encountered problems
+
+The main issue was "how to" wrap my head around this. At first I couldn't make self contained modules for testing. But after consideration i started to make changes only for one module and than test it.
+
+<hr>
+
+### Infrastructure Configuration (Ansible)
+
+TODO
