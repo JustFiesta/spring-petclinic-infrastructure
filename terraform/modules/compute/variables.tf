@@ -1,9 +1,14 @@
-variable "ami-id" {
+variable "ami_id" {
     description = "Application EC2 AMI"
     type = string 
 }
 
-variable "public_sub_id" {
+variable "public_sub_a_id" {
+  description = "Public subnet ID"
+  type        = string
+}
+
+variable "public_sub_b_id" {
   description = "Public subnet ID"
   type        = string
 }

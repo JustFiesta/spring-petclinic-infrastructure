@@ -39,9 +39,8 @@ module "compute" {
     source = "./modules/compute"
 
     ami_id            = "ami-0776c814353b4814d" # ubuntu 24.04 LTS AMI
-    vpc_id            = module.network.vpc_id
-    public_sub_id     = module.network.public_sub_id
-    private_sub_id    = module.network.private_sub_id
+    public_sub_a_id   = module.network.public_sub_a_id
+    public_sub_b_id   = module.network.public_sub_b_id
     ssh_sec_group     = module.network.ssh_sec_group
     http_sec_group    = module.network.http_sec_group
     jenkins_sec_group = module.network.jeknins_sec_group
