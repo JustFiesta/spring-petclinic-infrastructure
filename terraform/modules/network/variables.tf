@@ -8,14 +8,20 @@ variable "vpc_cidr" {
     default = "10.0.0.0/16"
 }
 
-variable "public_sub" {
+variable "public_sub_a" {
     type    = string
-    default = "10.0.1.0/24"
+    default = "10.0.10.0/24"
 }
+
+variable "public_sub_b" {
+    type    = string
+    default = "10.0.20.0/24"
+}
+
 
 variable "private_sub" {
     type    = string
-    default = "10.0.2.0/24"
+    default = "10.0.30.0/24"
 }
 
 variable "alb_port" {

@@ -2,8 +2,12 @@ output "vpc_id" {
     value = aws_vpc.this.id
 }
 
-output "public_sub_id" {
-    value = aws_subnet.public.id
+output "public_sub_a_id" {
+    value = aws_subnet.public_a.id
+}
+
+output "public_sub_b_id" {
+    value = aws_subnet.public_b.id
 }
 
 output "private_sub_id" {

@@ -4,13 +4,23 @@ resource "aws_vpc" "this" {
 }
 
 # Create subnets (public, private)
-resource "aws_subnet" "public" {
-    vpc_id            = aws_vpc.this.id
-    cidr_block        = "${var.public_sub}"
+resource "aws_subnet" "public_a" {
+    vpc_id                  = aws_vpc.this.id
+    cidr_block              = var.public_sub_a
     map_public_ip_on_launch = true
-    availability_zone = "${var.region}a"
+    availability_zone       = "${var.region}a"
     tags = {
-        Name = "capstone_public"
+        Name = "capstone_public_a"
+    }
+}
+
+resource "aws_subnet" "public_b" {
+    vpc_id                  = aws_vpc.this.id
+    cidr_block              = var.public_sub_b
+    map_public_ip_on_launch = true
+    availability_zone       = "${var.region}b"
+    tags = {
+        Name = "capstone_public_b"
     }
 }
 
@@ -34,7 +44,7 @@ resource "aws_internet_gateway" "gw" {
 # Create NAT Gataway for private subnet
 resource "aws_nat_gateway" "nat" {
     allocation_id = aws_eip.nat.id
-    subnet_id     = aws_subnet.public.id
+    subnet_id     = aws_subnet.private.id
     tags = {
         Name = "capstone_nat_gateway"
     }
@@ -57,8 +67,13 @@ resource "aws_route_table" "public" {
     }
 }
 
-resource "aws_route_table_association" "public" {
-    subnet_id      = aws_subnet.public.id
+resource "aws_route_table_association" "public_a" {
+    subnet_id      = aws_subnet.public_a.id
+    route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "public_b" {
+    subnet_id      = aws_subnet.public_b.id
     route_table_id = aws_route_table.public.id
 }
 
@@ -154,7 +169,7 @@ resource "aws_lb" "app" {
     internal           = false
     load_balancer_type = "application"
     security_groups    = [aws_security_group.http.id]
-    subnets            = [aws_subnet.public.id]
+    subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id]
 
     tags = {
         Name = "capstone_alb"
@@ -171,7 +186,7 @@ resource "aws_lb_target_group" "app" {
     health_check {
         path                = "/"
         interval            = 30
-        timeout             = 5
+        timeout             = 3
         healthy_threshold   = 2
         unhealthy_threshold = 2
         matcher             = "200-299"
