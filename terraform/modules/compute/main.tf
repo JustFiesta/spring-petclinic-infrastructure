@@ -37,6 +37,19 @@ resource "aws_instance" "jenkins" {
   key_name      = var.ssh_key_name
 
   tags = {
-      Name  = "capstone_project_jenkins"
+      Name  = "capstone_project_jenkins_buildserver"
   }
+}
+
+# Register Instances to Target Group
+resource "aws_lb_target_group_attachment" "app_server_a" {
+    target_group_arn = var.target_group_arn
+    target_id        = aws_instance.app_server_a.id
+    port             = var.alb_port
+}
+
+resource "aws_lb_target_group_attachment" "app_server_b" {
+    target_group_arn = var.target_group_arn
+    target_id        = aws_instance.app_server_b.id
+    port             = var.alb_port
 }

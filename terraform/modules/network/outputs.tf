@@ -25,3 +25,7 @@ output "ssh_sec_group" {
 output "jeknins_sec_group" {
     value = aws_security_group.jenkins.id
 }
+
+output "target_group_arn" {
+    value = aws_lb_target_group.app.id
+}

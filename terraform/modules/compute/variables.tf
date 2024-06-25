@@ -32,3 +32,12 @@ variable "jenkins_sec_group" {
   description = "Jenkins security group ID"
   type        = string
 }
+
+variable "alb_port" {
+    type    = number
+    default = 80
+}
+
+variable target_group_arn {
+    type    = string
+}
