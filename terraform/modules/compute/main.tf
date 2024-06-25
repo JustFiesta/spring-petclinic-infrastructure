@@ -1,4 +1,4 @@
-resource "aws_instance" "app_server" {
+resource "aws_instance" "app_server_a" {
   ami           = var.ami-id
   instance_type = "t3.micro"
   subnet_id     = var.public_sub_a_id
@@ -7,7 +7,7 @@ resource "aws_instance" "app_server" {
   depends_on = [aws_instance.jenkins]
 }
 
-resource "aws_instance" "app_server" {
+resource "aws_instance" "app_server_b" {
   ami           = var.ami-id
   instance_type = "t3.micro"
   subnet_id     = var.public_sub_b_id

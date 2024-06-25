@@ -34,7 +34,7 @@ module "database" {
 
     depends_on   = [module.network]
 }
-
+*/
 module "compute" {
     source = "./modules/compute"
 
@@ -44,8 +44,7 @@ module "compute" {
     private_sub_id    = module.network.private_sub_id
     ssh_sec_group     = module.network.ssh_sec_group
     http_sec_group    = module.network.http_sec_group
-    jeknins_sec_group = module.network.jeknins_sec_group
+    jenkins_sec_group = module.network.jeknins_sec_group
 
     depends_on   = [module.network]
 }
-*/
