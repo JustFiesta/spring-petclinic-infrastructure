@@ -3,6 +3,11 @@ variable "ami_id" {
     type = string 
 }
 
+variable "ssh_key_name" {
+    type    = string
+    description = "The name of the SSH key pair to use for EC2 instances"
+}
+
 variable "public_sub_a_id" {
   description = "Public subnet ID"
   type        = string
