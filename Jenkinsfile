@@ -64,8 +64,10 @@ pipeline {
             }
             steps {
                 input message: 'Apply new changes?', ok: 'Apply'
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
-                    sh 'terraform apply -auto-approve -no-color'
+                dir('terraform') {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
+                        sh 'terraform apply -auto-approve -no-color'
+                    }
                 }
             }
         }
@@ -76,8 +78,10 @@ pipeline {
             }
             steps {
                 input message: 'Want to destroy resources?', ok: 'Destroy'
-                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
-                    sh 'terraform destroy -auto-approve -no-color'
+                dir('terraform') {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
+                        sh 'terraform destroy -auto-approve -no-color'
+                    }
                 }
             }
         }
