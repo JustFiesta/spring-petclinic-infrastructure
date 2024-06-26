@@ -30,7 +30,7 @@ module "database" {
 
     db_username = var.db_username
     db_password = var.db_password
-    rds_sec_group = module.network.rds_sec_group_id
+    rds_sec_group = module.network.rds_sec_group
     db_subnet_group = module.network.db_subnet_group
 
     depends_on    = [module.network]
