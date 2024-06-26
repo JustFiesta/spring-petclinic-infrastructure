@@ -1,7 +1,7 @@
 variable "db_name" {
   description = "Name of the database"
   type        = string
-  default     = "spring-petclinic"
+  default     = "springpetclinic"
 }
 
 variable "db_username" {
