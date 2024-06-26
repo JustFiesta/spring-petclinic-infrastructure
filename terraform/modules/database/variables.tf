@@ -24,3 +24,8 @@ variable "db_subnet_group" {
   description = "Subnet group name for the RDS instance"
   type        = string
 }
+
+variable "rdb_subnet_name" {
+    type        = string
+    default     = module.network.db_subnet_group_name
+}

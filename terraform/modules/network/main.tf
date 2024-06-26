@@ -3,7 +3,7 @@ resource "aws_vpc" "this" {
     cidr_block        = "${var.vpc_cidr}"
 }
 
-# Create subnets
+# Create subnets (public - EC2, private - RDS)
 resource "aws_subnet" "public_a" {
     vpc_id                  = aws_vpc.this.id
     cidr_block              = var.public_sub_a
@@ -24,10 +24,20 @@ resource "aws_subnet" "public_b" {
     }
 }
 
+resource "aws_subnet" "private" {
+    vpc_id                  = aws_vpc.this.id
+    cidr_block              = var.private
+    map_public_ip_on_launch = false
+
+    tags = {
+        Name = "capstone_public_b"
+    }
+}
+
 # Create rdb subnet group
 resource "aws_db_subnet_group" "default" {
   name       = "main"
-  subnet_ids = [aws_subnet.public_a.id, aws_subnet.public_b.id]
+  subnet_ids = [aws_subnet.private.id]
 
   tags = {
     Name = "capstone_subnet_group"
@@ -54,6 +64,17 @@ resource "aws_route_table" "public" {
     }
 }
 
+resource "aws_route_table" "private" {
+    vpc_id = aws_vpc.this.id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.gw.id
+    }
+    tags = {
+        Name = "capstone_private_route_table"
+    }
+}
+
 resource "aws_route_table_association" "public_a" {
     subnet_id      = aws_subnet.public_a.id
     route_table_id = aws_route_table.public.id
@@ -62,6 +83,11 @@ resource "aws_route_table_association" "public_a" {
 resource "aws_route_table_association" "public_b" {
     subnet_id      = aws_subnet.public_b.id
     route_table_id = aws_route_table.public.id
+}
+
+resource "aws_route_table_association" "private" {
+    subnet_id      = aws_subnet.private.id
+    route_table_id = aws_route_table.private.id
 }
 
 # Create security groups (allow: ssh - private, http - app, 8080 - jenkins, mysql)
