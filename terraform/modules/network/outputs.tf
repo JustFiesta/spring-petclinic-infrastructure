@@ -10,10 +10,6 @@ output "public_sub_b_id" {
     value = aws_subnet.public_b.id
 }
 
-output "private_sub_id" {
-    value = aws_subnet.private.id
-}
-
 output "http_sec_group" {
     value = aws_security_group.http.id
 }
@@ -24,6 +20,10 @@ output "ssh_sec_group" {
 
 output "jeknins_sec_group" {
     value = aws_security_group.jenkins.id
+}
+
+output "rds_sec_group" {
+    value = aws_security_group.rds.id
 }
 
 output "target_group_arn" {
