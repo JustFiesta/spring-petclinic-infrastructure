@@ -26,6 +26,10 @@ output "rds_sec_group" {
     value = aws_security_group.rds.id
 }
 
+output "db_subnet_group" {
+  value = aws_db_subnet_group.default.name
+}
+
 output "target_group_arn" {
     value = aws_lb_target_group.app.id
 }

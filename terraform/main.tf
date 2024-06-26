@@ -25,12 +25,13 @@ module "network" {
     source = "./modules/network"
 }
 
-
 module "database" {
     source = "./modules/database"
 
-    rds_sec_group = module.network.rds_sec_group
-    subnet_ids    = [module.network.public_sub_a_id, module.network.public_sub_a_id]
+    db_username = var.db_username
+    db_password = var.db_password
+    rds_sec_group = module.network.rds_sec_group_id
+    db_subnet_group = module.network.db_subnet_group
 
     depends_on    = [module.network]
 }

@@ -1,14 +1,26 @@
 variable "db_name" {
-    type    = string
-    default = "spring-petclinic"
+  description = "Name of the database"
+  type        = string
+  default     = "spring-petclinic"
 }
 
 variable "db_username" {
-    type      = string
-    sensitive = true
+  description = "Username for the database"
+  type        = string
 }
 
 variable "db_password" {
-    type      = string
-    sensitive = true
+  description = "Password for the database"
+  type        = string
+  sensitive   = true
+}
+
+variable "rds_sec_group" {
+  description = "Security group ID for the RDS instance"
+  type        = string
+}
+
+variable "db_subnet_group" {
+  description = "Subnet group name for the RDS instance"
+  type        = string
 }
