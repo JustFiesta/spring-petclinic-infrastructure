@@ -18,9 +18,14 @@ variable "public_sub_b" {
     default = "10.0.20.0/24"
 }
 
-variable "private" {
+variable "private_a" {
     type    = string
     default = "10.0.30.0/24"
+}
+
+variable "private_b" {
+    type    = string
+    default = "10.0.40.0/24"
 }
 
 variable "alb_port" {

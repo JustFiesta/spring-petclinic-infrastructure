@@ -24,20 +24,32 @@ resource "aws_subnet" "public_b" {
     }
 }
 
-resource "aws_subnet" "private" {
+resource "aws_subnet" "private_a" {
     vpc_id                  = aws_vpc.this.id
-    cidr_block              = var.private
+    cidr_block              = var.private_a
     map_public_ip_on_launch = false
+    availability_zone       = "${var.region}a"
 
     tags = {
-        Name = "capstone_public_b"
+        Name = "capstone_private_a"
+    }
+}
+
+resource "aws_subnet" "private_b" {
+    vpc_id                  = aws_vpc.this.id
+    cidr_block              = var.private_b
+    map_public_ip_on_launch = false
+    availability_zone       = "${var.region}b"
+
+    tags = {
+        Name = "capstone_private_b"
     }
 }
 
 # Create rdb subnet group
 resource "aws_db_subnet_group" "default" {
   name       = "main"
-  subnet_ids = [aws_subnet.private.id]
+  subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 
   tags = {
     Name = "capstone_subnet_group"
@@ -85,8 +97,13 @@ resource "aws_route_table_association" "public_b" {
     route_table_id = aws_route_table.public.id
 }
 
-resource "aws_route_table_association" "private" {
-    subnet_id      = aws_subnet.private.id
+resource "aws_route_table_association" "private_a" {
+    subnet_id      = aws_subnet.private_a.id
+    route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "private_b" {
+    subnet_id      = aws_subnet.private_b.id
     route_table_id = aws_route_table.private.id
 }
 
