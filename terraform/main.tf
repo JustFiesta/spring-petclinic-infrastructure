@@ -25,16 +25,16 @@ module "network" {
     source = "./modules/network"
 }
 
-/*
+
 module "database" {
     source = "./modules/database"
 
-    sec_group_id = module.network.sec_group_id
-    subnet_ids   = module.network.subnet_ids
+    rds_sec_group = module.network.rds_sec_group
+    subnet_ids    = [module.network.public_sub_a_id, module.network.public_sub_a_id]
 
-    depends_on   = [module.network]
+    depends_on    = [module.network]
 }
-*/
+
 module "compute" {
     source = "./modules/compute"
 
