@@ -11,7 +11,6 @@ resource "aws_db_instance" "default" {
     publicly_accessible  = false
     multi_az             = false
     vpc_security_group_ids = [var.rds_sec_group]
-    db_subnet_group_name = var.rdb_subnet_name
 
     tags = {
         Name = "capstone_rds_mysql"

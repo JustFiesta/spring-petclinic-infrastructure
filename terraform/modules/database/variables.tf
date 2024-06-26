@@ -27,5 +27,4 @@ variable "db_subnet_group" {
 
 variable "rdb_subnet_name" {
     type        = string
-    default     = module.network.db_subnet_group_name
 }

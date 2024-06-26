@@ -34,6 +34,6 @@ output "target_group_arn" {
     value = aws_lb_target_group.app.id
 }
 
-output "db_subnet_group_name" {
+output "db_subnet_name" {
     value = aws_db_subnet_group.default.name
 }
