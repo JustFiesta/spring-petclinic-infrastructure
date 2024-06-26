@@ -24,6 +24,16 @@ resource "aws_subnet" "public_b" {
     }
 }
 
+# Create rdb subnet group
+resource "aws_db_subnet_group" "default" {
+  name       = "main"
+  subnet_ids = [aws_subnet.public_a.id, aws_subnet.public_b.id]
+
+  tags = {
+    Name = "capstone_subnet_group"
+  }
+}
+
 # Create internet gateway for public subnet
 resource "aws_internet_gateway" "gw" {
     vpc_id            = aws_vpc.this.id

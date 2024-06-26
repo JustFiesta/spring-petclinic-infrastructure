@@ -27,7 +27,7 @@ output "rds_sec_group" {
 }
 
 output "db_subnet_group" {
-  value = aws_db_subnet_group.default.name
+    value = aws_db_subnet_group.default.id
 }
 
 output "target_group_arn" {
