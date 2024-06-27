@@ -1,30 +1,70 @@
 ---
 - hosts: webservers
-  become: true
+  become: yes
   tasks:
-    - name: install dependencies - webservers (docker, git, java)
-      package:
-        name:
-          - openjdk-21-jre-headless
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install dependencies
+      apt:
+        name: 
+          - ca-certificates
+          - curl
+        state: present
+
+    - name: Create /etc/apt/keyrings directory
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download Docker GPG key
+      get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: '0644'
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Update apt cache after adding Docker repo
+      apt:
+        update_cache: yes
+
+    - name: Install Docker and Java
+      apt:
+        name: 
           - docker-ce
           - docker-ce-cli
           - containerd.io
           - docker-buildx-plugin
           - docker-compose-plugin
+          - openjdk-21-jre-headless
         state: latest
-      notify: start docker
-  handlers:
-    - name: run and enable docker
-      service:
+
+    - name: Start and enable Docker service
+      systemd:
         name: docker
         state: started
         enabled: yes
-      listen: start docker
+
 
 - hosts: buildservers
   become: true
   tasks:
-    - name: install dependencies - buildservers (jenkins)
+    - name: Install Jenkins and Java - buildservers
       package:
         name:
+          - openjdk-21-jre-headless
           - jenkins
+        state: latest
+
+  handlers:
+    - name: Jenkins restart
+      systemd:
+        name: jenkins
+        state: restarted
+        enabled: yes
