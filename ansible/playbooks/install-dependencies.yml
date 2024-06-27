@@ -1,0 +1,30 @@
+---
+- hosts: webservers
+  become: true
+  tasks:
+    - name: install dependencies - webservers (docker, git, java)
+      package:
+        name:
+          - openjdk-21-jre-headless
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: latest
+      notify: start docker
+  handlers:
+    - name: run and enable docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+      listen: start docker
+
+- hosts: buildservers
+  become: true
+  tasks:
+    - name: install dependencies - buildservers (jenkins)
+      package:
+        name:
+          - jenkins
