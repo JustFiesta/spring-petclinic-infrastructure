@@ -47,7 +47,7 @@ module "compute" {
     http_sec_group    = module.network.http_sec_group
     jenkins_sec_group = module.network.jeknins_sec_group
     target_group_arn  = module.network.target_group_arn
-    ssh_key_name      = "mbocak_key"
+    ssh_key_name      = "mbocak_key_capstone"
 
     depends_on   = [module.network]
 }
