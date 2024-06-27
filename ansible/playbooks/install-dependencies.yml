@@ -60,6 +60,20 @@
 - hosts: buildservers
   become: true
   tasks:
+    - name: Add Jenkins GPG apt Key
+      apt_key:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        state: present
+
+    - name: Add Jenkins Repository
+      apt_repository:
+        repo: deb https://pkg.jenkins.io/debian-stable binary/
+        state: present
+
+    - name: Update apt cache after adding Jenkins repo
+      apt:
+        update_cache: yes
+        
     - name: Install Jenkins and Java - buildservers
       package:
         name:
