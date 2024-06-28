@@ -41,11 +41,15 @@ This repository contains automation of insfrastructure deployment for spring-pet
     ```bash
     export TF_VAR_aws_access_key=<access_key_value>
     export TF_VAR_aws_secret_key=<secret_key_value>
-    export TF_VAR_db_username=<username_value>     
-    export TF_VAR_db_password=<password_value>
+    ```
+    
+6. Configure AWS CLI 
+
+    ```bash
+    aws configure
     ```
 
-6. Initilize terraform with S3 backend
+7. Initilize terraform with S3 backend
 
     ```bash
     cd ./terraform
@@ -74,29 +78,29 @@ This instance can apply or destroy incoming changes to Terraform configured AWS 
 
 1. Credentials for AWS CLI in Jenkins
 
-This bothered me for few hours. I could not run any terraform operation in Jenkins controll unit for `spring-petclinic-infrastructure`. Initially I thought it was Terraform problem.
+    This bothered me for few hours. I could not run any terraform operation in Jenkins controll unit for `spring-petclinic-infrastructure`. Initially I thought it was Terraform problem.
 
-Steps I made to fix it:
+    Steps I made to fix it:
 
-* install terraform on ec2 and point Jenkins to its binary installation folder.
-* install aws cli on controll unit (it did not help at all).
-* check if Jenkins sees credentials.
-* set enviroment variables inside Jenkins pipeline so every agent can use AWS credentials.
+    * install terraform on ec2 and point Jenkins to its binary installation folder.
+    * install aws cli on controll unit (it did not help at all).
+    * check if Jenkins sees credentials.
+    * set enviroment variables inside Jenkins pipeline so every agent can use AWS credentials.
 
-Had to create credentials in Jenkins control unit, and after that set AWS enviroment variables (region and credentials) like so:
+    Had to create credentials in Jenkins control unit, and after that set AWS enviroment variables (region and credentials) like so:
 
-```bash
-    environment {
-        AWS_DEFAULT_REGION="eu-west-1"
-        AWS_CREDENTIALS=credentials('mbocak-credentials')
-    }
-```
+    ```bash
+        environment {
+            AWS_DEFAULT_REGION="eu-west-1"
+            AWS_CREDENTIALS=credentials('mbocak-credentials')
+        }
+    ```
 
 2. Conditionals based on choice parameters
 
-Choice parameters when sent via Webhook do not contain any value, so FIRST one is used by default.
+    Choice parameters when sent via Webhook do not contain any value, so FIRST one is used by default.
 
-Had to change parameters layout a bit, so neither `Apply` or `Destroy` are taken first.
+    Had to change parameters layout a bit, so neither `Apply` or `Destroy` are taken first.
 
 <hr>
 
@@ -110,10 +114,15 @@ Each modules uses variables specified by use (network/variables.tf) or given fro
 
 #### Encountered problems
 
-The main issue was "how to" wrap my head around this. At first I couldn't make self contained modules for testing. But after consideration i started to make changes only for one module and than test it.
+1. The main issue was "how to" wrap my head around this. At first I couldn't make self contained modules for testing. But after consideration i started to make changes only for one module and than test it.
+
+2. Second one was about RDS - it just could not take given security groups.
 
 <hr>
 
 ### Infrastructure Configuration (Ansible)
 
-TODO
+Ansible is used to configure EC2 app instances - install docker on webservers and Jenkins on buildserver. VM's have pulic IP address so Ansible can connect to them via SSH.
+
+No ansible roles where needed in my opinion - they were unnessesary complication for simple project.
+
