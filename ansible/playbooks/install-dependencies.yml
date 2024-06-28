@@ -34,7 +34,6 @@
           - containerd.io
           - docker-buildx-plugin
           - docker-compose-plugin
-          - openjdk-21-jre-headless
         state: latest
       notify: restart docker
 
@@ -77,7 +76,7 @@
     - name: Install Jenkins and Java - buildservers
       package:
         name:
-          - openjdk-21-jre-headless
+          - openjdk-17-jre-headless
           - jenkins
         state: latest
       notify: restart jenkins
