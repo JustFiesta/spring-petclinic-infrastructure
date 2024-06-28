@@ -3,7 +3,7 @@ resource "aws_db_instance" "default" {
     engine               = "mysql"
     engine_version       = "8.0"
     instance_class       = "db.t3.micro"
-    identifier           = "petclinic"
+    identifier           = "capstone-petclinic"
     db_name              = var.db_name
     username             = var.db_username
     password             = var.db_password
