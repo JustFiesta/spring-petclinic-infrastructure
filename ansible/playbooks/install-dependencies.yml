@@ -1,12 +1,12 @@
 ---
-- hosts: webservers
+- hosts: all
   become: yes
   tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
 
-    - name: Install dependencies
+    - name: Install dependencies - Java, Docker - all hosts
       apt:
         name: 
           - ca-certificates
@@ -73,10 +73,9 @@
       apt:
         update_cache: yes
         
-    - name: Install Jenkins and Java - buildservers
+    - name: Install Jenkins - buildservers
       package:
         name:
-          - openjdk-17-jre-headless
           - jenkins
         state: latest
       notify: restart jenkins
