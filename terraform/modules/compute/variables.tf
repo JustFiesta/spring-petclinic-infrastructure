@@ -41,3 +41,13 @@ variable "alb_port" {
 variable target_group_arn {
     type    = string
 }
+
+variable app_instance_type {
+    type    = string
+    default = "t3.small" 
+}
+
+variable buildserver_instance_type {
+    type    = string
+    default = "t3.small" 
+}

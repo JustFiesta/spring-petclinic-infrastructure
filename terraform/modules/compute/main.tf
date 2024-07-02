@@ -1,6 +1,6 @@
 resource "aws_instance" "app_server_a" {
   ami           = var.ami_id
-  instance_type = "t3.micro"
+  instance_type = var.app_instance_type
   subnet_id     = var.public_sub_a_id
   vpc_security_group_ids = [var.ssh_sec_group, var.http_sec_group]
 
@@ -15,7 +15,7 @@ resource "aws_instance" "app_server_a" {
 
 resource "aws_instance" "app_server_b" {
   ami           = var.ami_id
-  instance_type = "t3.micro"
+  instance_type = var.app_instance_type
   subnet_id     = var.public_sub_b_id
   vpc_security_group_ids = [var.ssh_sec_group, var.http_sec_group]
 
@@ -30,7 +30,7 @@ resource "aws_instance" "app_server_b" {
 
 resource "aws_instance" "jenkins" {
   ami           = var.ami_id
-  instance_type = "t3.micro"
+  instance_type = var.buildserver_instance_type
   subnet_id     = var.public_sub_a_id
   vpc_security_group_ids = [var.ssh_sec_group, var.jenkins_sec_group]
 
