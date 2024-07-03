@@ -7,12 +7,12 @@ variable "region" {
 variable "db_username" {
   description = "Username for the RDS instance"
   type        = string
-  default     = "admin"
+  default     = "petclinic"
 }
 
 variable "db_password" {
   description = "Password for the RDS instance"
   type        = string
   sensitive   = true
-  default     = "password"
+  default     = "petclinic"
 }
