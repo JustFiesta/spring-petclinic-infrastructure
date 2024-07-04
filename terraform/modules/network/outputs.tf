@@ -2,12 +2,12 @@ output "vpc_id" {
     value = aws_vpc.this.id
 }
 
-output "public_sub_a_id" {
-    value = aws_subnet.public_a.id
+output "private_sub_a_id" {
+    value = aws_subnet.private_a.id
 }
 
-output "public_sub_b_id" {
-    value = aws_subnet.public_b.id
+output "private_sub_b_id" {
+    value = aws_subnet.private_b.id
 }
 
 output "http_sec_group" {
@@ -30,6 +30,10 @@ output "db_subnet_group_name" {
     value = aws_db_subnet_group.default.id
 }
 
-output "target_group_arn" {
+output "app_target_group_arn" {
     value = aws_lb_target_group.app.id
+}
+
+output "jenkins_target_group_arn" {
+    value = aws_lb_target_group.jenkins.id
 }

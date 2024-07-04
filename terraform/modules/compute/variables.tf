@@ -8,13 +8,13 @@ variable "ssh_key_name" {
     description = "The name of the SSH key pair to use for EC2 instances"
 }
 
-variable "public_sub_a_id" {
-  description = "Public subnet ID"
+variable "private_sub_a_id" {
+  description = "Private subnet ID"
   type        = string
 }
 
-variable "public_sub_b_id" {
-  description = "Public subnet ID"
+variable "private_sub_b_id" {
+  description = "Private subnet ID"
   type        = string
 }
 
@@ -33,12 +33,21 @@ variable "jenkins_sec_group" {
   type        = string
 }
 
-variable "alb_port" {
+variable "alb_app_port" {
     type    = number
     default = 80
 }
 
-variable target_group_arn {
+variable "alb_jenkins_port" {
+    type    = number
+    default = 8080
+}
+
+variable app_target_group_arn {
+    type    = string
+}
+
+variable jenkins_target_group_arn {
     type    = string
 }
 
