@@ -27,7 +27,7 @@
       apt:
         update_cache: yes
 
-    - name: Install Docker and Java
+    - name: Install Docker
       apt:
         name: 
           - docker-ce
@@ -76,10 +76,11 @@
       apt:
         update_cache: yes
         
-    - name: Install Jenkins - buildservers
-      package:
+    - name: Install Jenkins and Java - buildservers
+      apt:
         name:
           - jenkins
+          - openjdk-17-jre-headless
         state: latest
       notify: restart jenkins
 
