@@ -36,6 +36,10 @@ resource "aws_instance" "jenkins" {
 
   key_name      = var.ssh_key_name
 
+  root_block_device {
+    volume_size = 30
+  }
+
   tags = {
       Name  = "capstone_project_jenkins_buildserver"
   }
