@@ -13,7 +13,11 @@ All instances provided are run on Ubuntu 24 LTS.
 
 <hr>
 
-## Setup workstation
+## Setup infrastructure initial infrastructure (workstation + Jenkins Controller)
+
+### Setup workstation
+
+Workstation is used to test given infrastructure and install packages to targets with Ansible.
 
 1. Clone repository into workstation with
 
@@ -45,8 +49,8 @@ All instances provided are run on Ubuntu 24 LTS.
     export TF_VAR_aws_access_key=<access_key_value>
     export TF_VAR_aws_secret_key=<secret_key_value>
     ```
-    
-6. Configure AWS CLI 
+
+6. Configure AWS CLI
 
     ```bash
     aws configure
@@ -59,17 +63,33 @@ All instances provided are run on Ubuntu 24 LTS.
     terraform init -backend-config=backend.tf
     ```
 
-## Jenkins Controller
+### Setup Jenkins Controller
 
-This one needs to be setted up manually as a part of workspace.
+Provide EC2 instance in Default VPC and install Java and Jenkins accrodint to [this tutorial](https://www.jenkins.io/doc/book/installing/linux/#debianubuntu).
 
-Main objective of this server is to check and integrate Terraform infrastrcuture and provide it as manual job. Additionally it acts as controller for application buildserver.
+It is used for integrating infrastructure code and deploying it to AWS, and as a Controller for application buildserver.
 
-[Installation](https://www.jenkins.io/doc/book/installing/linux/#debianubuntu)
+1. Install according to tutorial on EC2 (Java + Jenkins + Terraform + AWS CLI)
+
+2. Install recommended plugins, set user, password, etc.
+
+3. Setup credentials for:
+
+    * Dockerhub (docker-cred)
+    * GitHub
+    * AWS
+
+4. Setup Gradle tool (version 8.7 with name "8.7")
+
+5. Add GitHub webhook to infrastructure repository.
+
+6. Add multibranch pipeline with GitHub project and SCM pipeline.
+
+After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
 <hr>
 
-## Project Elements
+## Explanation of components
 
 ### Workstation
 
@@ -79,11 +99,11 @@ It is made for testing Terraform, Ansible and Docker.
 
 <hr>
 
-### Infrastructure build server
+### Jenkins Controller
 
-Jenkins server inside default VPC, with its own IP and opened ports: 22, and 8080.
+Jenkins controller setted up manually in Default VPC as a part of workspace, with its own IP and opened ports: 22, 8080.
 
-This instance can apply or destroy incoming changes to Terraform configured AWS infrastructure, and control flow of app intergration via agent provised from Terraform.
+Main objective of this server is to check, integrate Terraform infrastrcuture and provide it as manual job. Additionally it acts as controller for application buildserver.
 
 #### Encountered problems
 
