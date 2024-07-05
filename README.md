@@ -175,12 +175,12 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
-One also needs to add Agent with commands given in Jenkins panel. Eventually Agent can be used as a separete Jenkins Server with build job for application.
-
-Note: *If one decides to use this Jenkins as controller for other buildservers* - add agent port in settings (default turned off - no agent will connect).
+One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `user data` inside `compute/variables.tf` variable.
+There is a sample variable (`app_server_user_data`), user needs to input correct IP address and secret of Jenkins Controller.
 
 ## Setup application infrastructure
 
+0. Change IP addres of Controller in `app_server_user_data` inside `compute/variables.tf`.
 1. Run `Apply` job from Jenkins Controller.
 2. Inside workstation: Add correct IP addreses to `hosts.yml`
 3. Inside workstation: Install reqiured packages with Ansible
@@ -195,7 +195,6 @@ Note: *If one decides to use this Jenkins as controller for other buildservers* 
 4. Go to IP address of Jenkins buildserver
 5. Login with password from file (`/var/lib/jenkins/secrets/initialAdminPassword` from Jenkins EC2)
 6. Install recommended plugins
-7. Craete user
-8. Decide weather to use it as agent or separete server (check REAMDE from spring-petclinic repository)
-9. Add GitHub webhook to spring-petclinic repository
-10. Create multibranch project in Controller/new build with GitHub project and SCM pipeline
+7. Create user
+8. Add GitHub webhook to spring-petclinic repository
+9. Create multibranch project in Controller/new build with GitHub project and SCM pipeline
