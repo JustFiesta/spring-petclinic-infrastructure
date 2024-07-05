@@ -2,11 +2,14 @@
 
 This repository contains automation of insfrastructure deployment for spring-petclinic app.
 
+All instances provided are run on Ubuntu 24 LTS.
+
 ## Tools used
 
 * Bash scripts - install tools on workstation
 * Terraform - provide AWS infrastructure for app
 * Ansible - configure EC2 instances
+* Jenkins - integration server for infrastrucuture repository. Acts as Controller.
 
 <hr>
 
@@ -56,6 +59,14 @@ This repository contains automation of insfrastructure deployment for spring-pet
     terraform init -backend-config=backend.tf
     ```
 
+## Jenkins Controller
+
+This one needs to be setted up manually as a part of workspace.
+
+Main objective of this server is to check and integrate Terraform infrastrcuture and provide it as manual job. Additionally it acts as controller for application buildserver.
+
+[Installation](https://www.jenkins.io/doc/book/installing/linux/#debianubuntu)
+
 <hr>
 
 ## Project Elements
@@ -72,7 +83,7 @@ It is made for testing Terraform, Ansible and Docker.
 
 Jenkins server inside default VPC, with its own IP and opened ports: 22, and 8080.
 
-This instance can apply or destroy incoming changes to Terraform configured AWS infrastructure.
+This instance can apply or destroy incoming changes to Terraform configured AWS infrastructure, and control flow of app intergration via agent provised from Terraform.
 
 #### Encountered problems
 
@@ -125,4 +136,3 @@ Each modules uses variables specified by use (network/variables.tf) or given fro
 Ansible is used to configure EC2 app instances - install docker on webservers and Jenkins on buildserver. VM's have pulic IP address so Ansible can connect to them via SSH.
 
 No ansible roles where needed in my opinion - they were unnessesary complication for simple project.
-
