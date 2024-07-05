@@ -49,5 +49,5 @@ variable app_instance_type {
 
 variable buildserver_instance_type {
     type    = string
-    default = "t3.small" 
+    default = "t3.medium" 
 }
