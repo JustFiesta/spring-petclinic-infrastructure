@@ -178,3 +178,24 @@ After this configuration code can be automaticlly: formatted, valdiated. One can
 One also needs to add Agent with commands given in Jenkins panel. Eventually Agent can be used as a separete Jenkins Server with build job for application.
 
 Note: *If one decides to use this Jenkins as controller for other buildservers* - add agent port in settings (default turned off - no agent will connect).
+
+## Setup application infrastructure
+
+1. Run `Apply` job from Jenkins Controller.
+2. Inside workstation: Add correct IP addreses to `hosts.yml`
+3. Inside workstation: Install reqiured packages with Ansible
+
+    ```bash
+    cd spring-petclinic-infrastructure/ansible
+    ansible-playbook playbooks/install-dependencies.yml
+    ```
+
+    Note: Before using ansible copy ID to hosts with `ssh-copy-id`
+
+4. Go to IP address of Jenkins buildserver
+5. Login with password from file (`/var/lib/jenkins/secrets/initialAdminPassword` from Jenkins EC2)
+6. Install recommended plugins
+7. Craete user
+8. Decide weather to use it as agent or separete server (check REAMDE from spring-petclinic repository)
+9. Add GitHub webhook to spring-petclinic repository
+10. Create multibranch project in Controller/new build with GitHub project and SCM pipeline
