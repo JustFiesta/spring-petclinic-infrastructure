@@ -58,3 +58,12 @@
         state: restarted
         enabled: yes
       listen: restart docker
+
+- hosts: buildservers
+  become: yes
+  tasks:
+    - name: Install gh CLI
+      apt:
+        name: 
+          - gh
+        state: latest
