@@ -51,13 +51,3 @@ variable buildserver_instance_type {
     type    = string
     default = "t3.medium" 
 }
-
-variable "app_server_user_data" {
-  description = "User data script for app server"
-  type        = string
-  default     = <<EOF
-#!/bin/bash
-curl -sO http://3.255.221.193:8080/jnlpJars/agent.jar
-java -jar agent.jar -url http://3.255.221.193:8080/ -secret e65ef7112c6b46455c4eb634e2ca827e3c61423ee28b84c5ce4ae76550bdbcb5 -name "petclinic-cicd" -workDir "/home/ubuntu/jenkins-agent"
-EOF
-}
