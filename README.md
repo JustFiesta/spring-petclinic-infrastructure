@@ -171,7 +171,9 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 
 5. Add GitHub webhook to infrastructure repository.
 
-6. Add multibranch pipeline project with GitHub project and SCM pipeline.
+6. Add multibranch pipeline project with GitHub **with tags dicovering** project and SCM pipeline for *spring-petclinic application*.
+
+7. Add pipeline project with GitHub and SCM pipeline for *spring-petclinic-infrastructure* repository
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
