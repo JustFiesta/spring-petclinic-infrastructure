@@ -29,6 +29,10 @@ Provided infrastrcue consists of:
 * Internet Gateway for VPC
 * Security Groups for: application (80), Jenkins (8080), SSH (22)
 
+SSH key specified in terraform/main.tf is used to connect to instances. If one does not have any key the easiest way is to create one in AWS Console and change key name in mentioned file.
+
+Also one needs to SCP private key into Workstation. Otherwise it will not be able to connect via Ansible to servers.
+
 <hr>
 
 ## Explanation of components
@@ -37,7 +41,7 @@ Provided infrastrcue consists of:
 
 Workstation setted up manually inside Default VPC, with its own IP and opened ports: 22.
 
-Mainly it is used to install needed packages with **Ansible**.
+Mainly it is used to install needed packages, deploy Agent service and redeploy web applications with **Ansible**.
 
 It can also test Terraform and Docker.
 
@@ -91,9 +95,11 @@ Each modules uses variables specified by use (`network/variables.tf`) or given f
 
 ### Infrastructure Configuration (Ansible)
 
-Ansible is used to configure EC2 app instances - install docker on webservers and Jenkins on buildserver. VM's have pulic IP address so Ansible can connect to them via SSH.
+Ansible is used to configure EC2 app instances - install Docker on webservers and Java on buildserver. VM's have pulic IP address so Ansible can connect to them via SSH.
 
-The hosts needs to be changed according to given IP addreses in AWS Console. Only then one can provide instances with packages.
+Also it provides Jenkins Agent instance with configuration as agent with systemd service - `petclinic-cicd.service`.
+
+The `hosts.yml` needs to be changed according to given IP addreses in AWS Console. Only then one can provide instances with packages.
 
 No ansible roles where needed in my opinion - they were unnessesary complication for simple project.
 
@@ -103,8 +109,9 @@ No ansible roles where needed in my opinion - they were unnessesary complication
 
 ### Setup workstation
 
-Workstation is used to test given infrastructure and **install packages to targets with Ansible**.
+Workstation is used to **install packages to targets with Ansible** and test given infrastructure.
 
+0. `scp` **public key** file into workstations `/home/ubuntu/.ssh server` (key is specified in /terraform/main.tf file, on default it its `mbocak_key`)
 1. Clone repository into workstation with
 
     ```bash
@@ -163,9 +170,11 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 
 3. Setup credentials for:
 
-    * Dockerhub (docker-cred)
-    * GitHub
-    * AWS
+    * Dockerhub (docker-cred) - Docker Hub credentials
+    * GitHub (github-cred) - GitHub credentials for account where both repositories reside
+    * AWS (mbocak-credentials) - access keys for AWS account
+    * SSH Key (aws-key) - for connecting to workstation and use ansible to redeploy application
+    * workstation IP (workstation-ip) - for secure access to workstation punlic IP address from manual jobs
 
 4. Setup Gradle tool (version 8.7 with name "8.7")
 
@@ -178,7 +187,9 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
 One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `configure-petclinic-service.yml` inside `ansible/playbooks/`.
-There are some sample variables, user needs to input correct IP address and secret from Jenkins Controller, other are optional.
+There are some sample variables. User needs to input correct IP address and secret from Jenkins Controller, other are optional.
+
+<hr>
 
 ## Setup application infrastructure
 
@@ -202,4 +213,8 @@ There are some sample variables, user needs to input correct IP address and secr
 
 5. Add GitHub webhook to spring-petclinic repository
 
-6. Deploy app infrastructure from Manual job inside Jenkins Controller
+6. Deploy app infrastructure from Manual job inside Jenkins Controller - check *spring-petclinic application* README
+
+### Redeploy application
+
+Application is redeploied via manual Job, which uses Ansible from Workstation to redeploy docker containers.
