@@ -1,0 +1,14 @@
+#!/bin/bash
+# --------------------------------------------
+# This script starts the Jenkins agent service
+
+# Set the working directory
+cd /usr/local/jenkins-service
+
+# Download the latest version of agent.jar from Controller
+curl -sO {{ jenkins_url }}/jnlpJars/agent.jar
+
+# Start the Jenkins agent
+java -jar {{ jenkins_agent_workdir }}/agent.jar -url {{ jenkins_url }}/ -secret {{ jenkins_secret }} -name "{{ jenkins_agent_name }}" -workDir "{{ jenkins_agent_workdir }}" 
+
+exit 0

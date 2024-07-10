@@ -1,12 +1,12 @@
 ---
-- hosts: all
+- hosts: webservers
   become: yes
   tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
 
-    - name: Install dependencies - Java, Docker - all hosts
+    - name: Install dependencies - Docker - webservers
       apt:
         name: 
           - ca-certificates
@@ -62,8 +62,8 @@
 - hosts: buildservers
   become: yes
   tasks:
-    - name: Install gh CLI
+    - name: Install dependencies - Java - buildservers
       apt:
         name: 
-          - gh
+          - openjdk-17-jre-headless
         state: latest

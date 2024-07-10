@@ -3,35 +3,56 @@
   hosts: buildservers
   become: yes
 
+  vars:
+    jenkins_url: "http://3.255.221.193:8080"
+    jenkins_secret: "some_secret_text_1234567890"
+    jenkins_agent_name: "petclinic-cicd"
+    jenkins_agent_workdir: "/usr/local/jenkins-service"
+
   tasks:
     - name: Ensure Java is installed
       ansible.builtin.package:
-        name: openjdk-17-jdk
+        name: openjdk-17-jdk-headless
         state: present
 
     - name: Create Jenkins agent working directory
       ansible.builtin.file:
-        path: /home/ubuntu/jenkins-agent
+        path: "{{ jenkins_agent_workdir }}"
         state: directory
         owner: ubuntu
         group: ubuntu
         mode: '0755'
 
-    - name: Copy agent.jar to working directory
-      ansible.builtin.copy:
-        src: /path/to/your/local/agent.jar
-        dest: /home/ubuntu/agent.jar
+    - name: Download agent.jar from Jenkins controller
+      ansible.builtin.get_url:
+        url: "{{ jenkins_url }}/jnlpJars/agent.jar"
+        dest: "{{ jenkins_agent_workdir }}/agent.jar"
         owner: ubuntu
         group: ubuntu
         mode: '0644'
 
-    - name: Create systemd service file for Petclinic CICD Agent
+    - name: Create start-agent.sh script
+      ansible.builtin.template:
+        src: start-agent.sh.j2
+        dest: "{{ jenkins_agent_workdir }}/start-agent.sh"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+      vars:
+        url: "{{ jenkins_url }}"
+        secret: "{{ jenkins_secret }}"
+        agent_name: "{{ jenkins_agent_name }}"
+        agent_workdir: "{{ jenkins_agent_workdir }}"
+
+    - name: Create systemd service file for Jenkins Agent
       ansible.builtin.template:
         src: petclinic-cicd.service.j2
         dest: /etc/systemd/system/petclinic-cicd.service
         owner: root
         group: root
         mode: '0644'
+      vars:
+        agent_workdir: "{{ jenkins_agent_workdir }}"
 
     - name: Reload systemd daemon
       ansible.builtin.command: systemctl daemon-reload

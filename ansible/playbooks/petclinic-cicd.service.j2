@@ -1,12 +1,14 @@
 [Unit]
 Description=Petclinic CICD Agent Service
 After=network.target
+Requires=network.target
 
 [Service]
-ExecStart=/usr/bin/java -jar /home/ubuntu/agent.jar -url http://JENKINS_IP:8080/ -secret secret_string_1234567890 -name "petclinic-cicd" -workDir "/home/ubuntu/jenkins-agent"
-WorkingDirectory=/home/ubuntu/jenkins-agent
+Type=simple
 User=ubuntu
+ExecStart=/bin/bash /usr/local/jenkins-service/start-agent.sh
 Restart=always
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
 
 [Install]
 WantedBy=multi-user.target

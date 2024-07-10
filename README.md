@@ -157,7 +157,7 @@ Provide EC2 instance in Default VPC and install Java and Jenkins accroding to [t
 
 It is used for integrating infrastructure code and deploying it to AWS, and as a Controller for application buildserver.
 
-1. Install according to tutorial on EC2 (Java + Jenkins + Terraform + AWS CLI)
+1. Install according to tutorial on EC2 - Java, Jenkins, Terraform, AWS CLI
 
 2. Install recommended plugins, set user, password, etc.
 
@@ -177,13 +177,12 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
-One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `petclinic-cicd.service.j2` inside `ansible/playbooks/`.
-There is a sample service template, user needs to input correct IP address and secret from Jenkins Controller.
+One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `configure-petclinic-service.yml` inside `ansible/playbooks/`.
+There are some sample variables, user needs to input correct IP address and secret from Jenkins Controller, other are optional.
 
 ## Setup application infrastructure
 
-0. Change IP addres of Controller in `app_server_user_data` inside `compute/variables.tf`.
-1. Run `Apply` job from Jenkins Controller.
+1. Inside workstation: Change IP and secret (and other default variables) in `configure-petclinic-service.yml` inside `ansible/playbooks`
 2. Inside workstation: Add correct IP addreses to `hosts.yml`
 3. Inside workstation: Install reqiured packages with Ansible
 
@@ -194,9 +193,13 @@ There is a sample service template, user needs to input correct IP address and s
 
     Note: Before using ansible copy ID to hosts with `ssh-copy-id`
 
-4. Go to IP address of Jenkins buildserver
-5. Login with password from file (`/var/lib/jenkins/secrets/initialAdminPassword` from Jenkins EC2)
-6. Install recommended plugins
-7. Create user
-8. Add GitHub webhook to spring-petclinic repository
-9. Create multibranch project in Controller/new build with GitHub project and SCM pipeline
+4. Inside workstation: Configure petclinic service for Jenkins Agent
+
+    ```bash
+    cd spring-petclinic-infrastructure/ansible
+    ansible-playbook playbooks/configure-petclinic-service.yml
+    ```
+
+5. Add GitHub webhook to spring-petclinic repository
+
+6. Deploy app infrastructure from Manual job inside Jenkins Controller
