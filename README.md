@@ -177,8 +177,8 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
-One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `user data` inside `compute/variables.tf` variable.
-There is a sample variable (`app_server_user_data`), user needs to input correct IP address and secret of Jenkins Controller.
+One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `petclinic-cicd.service.j2` inside `ansible/playbooks/`.
+There is a sample service template, user needs to input correct IP address and secret from Jenkins Controller.
 
 ## Setup application infrastructure
 

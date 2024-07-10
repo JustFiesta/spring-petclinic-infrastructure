@@ -1,0 +1,51 @@
+---
+- name: Configure Petclinic CICD Agent Service
+  hosts: buildservers
+  become: yes
+
+  tasks:
+    - name: Ensure Java is installed
+      ansible.builtin.package:
+        name: openjdk-17-jdk
+        state: present
+
+    - name: Create Jenkins agent working directory
+      ansible.builtin.file:
+        path: /home/ubuntu/jenkins-agent
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy agent.jar to working directory
+      ansible.builtin.copy:
+        src: /path/to/your/local/agent.jar
+        dest: /home/ubuntu/agent.jar
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Create systemd service file for Petclinic CICD Agent
+      ansible.builtin.template:
+        src: petclinic-cicd.service.j2
+        dest: /etc/systemd/system/petclinic-cicd.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd daemon
+      ansible.builtin.command: systemctl daemon-reload
+      notify:
+        - Restart petclinic-cicd service
+
+    - name: Enable petclinic-cicd service
+      ansible.builtin.service:
+        name: petclinic-cicd
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Restart petclinic-cicd service
+      ansible.builtin.service:
+        name: petclinic-cicd
+        state: restarted
