@@ -1,0 +1,33 @@
+---
+- hosts: webservers
+  become: yes
+  vars:
+    petclinic_repo: 'https://github.com/JustFiesta/spring-petclinic.git'
+    repo_directory: '"{{ repo_directory}}"'
+  tasks:
+    - name: Git checkout
+      git:
+        repo: "{{ petclinic_repo }}"
+        dest: "{{ repo_directory}}"
+        clone: true
+
+    - name: Set RDS_DB environment variable
+      ansible.builtin.shell: echo "RDS_DB={{ lookup('env', 'RDS_DB') }}" >> /etc/environment
+
+    - name: Pull newest image
+      shell: 'docker compose pull'
+      args:
+        chdir: "{{ repo_directory}}"
+
+    - name: Take down application with docker compose
+      shell: 'docker compose down'
+      args:
+        chdir: "{{ repo_directory}}"
+
+    - name: Deploy application with docker compose
+      shell: 'docker compose up -d'
+      args:
+        chdir: "{{ repo_directory}}"
+    
+    - name: Prune docker system
+      shell: 'docker system prune -f'
