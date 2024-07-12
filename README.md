@@ -193,8 +193,8 @@ There are some sample variables. User needs to input correct IP address and secr
 
 ## Setup application infrastructure
 
-1. Inside workstation: Change IP and secret (and other default variables) in `configure-petclinic-service.yml` inside `ansible/playbooks`
-2. Inside workstation: Add correct IP addreses to `hosts.yml`
+1. Add correct IP addreses to `hosts.yml` and push them to repository
+2. Inside workstation: Change IP and secret (and other default variables) in `configure-petclinic-service.yml` inside `ansible/playbooks`
 3. Inside workstation: Install reqiured packages with Ansible
 
     ```bash
