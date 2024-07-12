@@ -127,6 +127,11 @@ echo "Before proceeding please configure AWS CLI with: aws configure"
 echo "Docs: (https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-configure.html)"
 echo "============================================="
 
+# Set RDS_DB variable for deployment to run
+echo "Before proceeding please set RDS_DB enviroment variable to correct endpoint from  AWS Console."
+echo "============================================="
+
+
 # Post installation messages
 echo "Installation of Terraform, Ansible, Docker, Docker Compose, and AWS CLI is complete."
 echo "Please log out and log back in to apply Docker group changes. Or open a new shell via: su - \$USER"
