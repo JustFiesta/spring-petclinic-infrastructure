@@ -11,8 +11,15 @@
         dest: "{{ repo_directory}}"
         clone: true
 
-    - name: Set RDS_DB environment variable
-      ansible.builtin.shell: echo "RDS_DB={{ lookup('env', 'RDS_DB') }}" >> /etc/environment
+    - name: Set fact from workstation environment
+      set_fact:
+        rds_db_value: "{{ lookup('env', 'RDS_DB') }}"
+      delegate_to: localhost
+
+    - name: Set RDS_DB environment variable on hosts
+      shell: 'export RDS_DB=$RDS_DB'
+      environment:
+        RDS_DB: "{{ rds_db_value }}"
 
     - name: Pull newest image
       shell: 'docker compose pull'
