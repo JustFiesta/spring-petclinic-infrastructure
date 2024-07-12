@@ -3,7 +3,7 @@
   become: yes
   vars:
     petclinic_repo: 'https://github.com/JustFiesta/spring-petclinic.git'
-    repo_directory: '"{{ repo_directory}}"'
+    repo_directory: '/src/sprint-petclinic-repo'
   tasks:
     - name: Git checkout
       git:
