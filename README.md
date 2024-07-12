@@ -174,7 +174,7 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
     * GitHub (github-cred) - GitHub credentials for account where both repositories reside
     * AWS (mbocak-credentials) - access keys for AWS account
     * SSH Key (aws-key) - for connecting to workstation and use ansible to redeploy application
-    * workstation IP (workstation-ip) - for secure access to workstation punlic IP address from manual jobs
+    * workstation IP (workstation-ip) - for secure access to workstation punlic IP address from manual job
 
 4. Setup Gradle tool (version 8.7 with name "8.7")
 
@@ -217,4 +217,6 @@ There are some sample variables. User needs to input correct IP address and secr
 
 ### Redeploy application
 
-Application is redeploied via manual Job, which uses Ansible from Workstation to redeploy docker containers.
+Application is redeploied via manual Job, which uses Ansible from Workstation to redeploy docker containers - check *spring-petclinic* application README, section Deployment.
+
+In shortcut deployment needs RDS_DB variable to be setted manually on workstation before running Deploy job in Jenkins Controller.
