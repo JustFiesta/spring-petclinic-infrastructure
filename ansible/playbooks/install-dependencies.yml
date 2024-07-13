@@ -27,7 +27,7 @@
       apt:
         update_cache: yes
 
-    - name: Install Docker
+    - name: Install Docker - all
       apt:
         name: 
           - docker-ce
@@ -65,7 +65,7 @@
 - hosts: buildservers
   become: yes
   tasks:
-    - name: Install dependencies - Java - buildservers
+    - name: Install dependencies - buildservers
       apt:
         name: 
           - openjdk-17-jre-headless

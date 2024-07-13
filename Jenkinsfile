@@ -63,7 +63,6 @@ pipeline {
                 expression { params.ACTION == 'Apply' }
             }
             steps {
-                input message: 'Apply new changes?', ok: 'Apply'
                 dir('terraform') {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
                         sh 'terraform apply -auto-approve -no-color'
@@ -77,7 +76,6 @@ pipeline {
                 expression { params.ACTION == 'Destroy' }
             }
             steps {
-                input message: 'Want to destroy resources?', ok: 'Destroy'
                 dir('terraform') {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'mbocak-credentials']]) {
                         sh 'terraform destroy -auto-approve -no-color'
