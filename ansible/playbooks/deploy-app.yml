@@ -10,6 +10,7 @@
         repo: "{{ petclinic_repo }}"
         dest: "{{ repo_directory}}"
         clone: true
+        force: yes
 
     - name: Set fact from workstation environment
       set_fact:
