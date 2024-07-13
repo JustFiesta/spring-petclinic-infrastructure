@@ -18,9 +18,14 @@
       delegate_to: localhost
 
     - name: Set RDS_DB environment variable on hosts
-      shell: 'export RDS_DB=$RDS_DB'
-      environment:
-        RDS_DB: "{{ rds_db_value }}"
+      ansible.builtin.lineinfile:
+        path: /etc/environment
+        line: "RDS_DB={{ rds_db_value }}"
+        create: yes
+      notify: restart ssh
+
+    # - name: Source /etc/environment to apply RDS_DB on hosts
+    #   ansible.builtin.shell: "bash -c 'source /etc/environment && echo $RDS_DB'"
 
     - name: Pull newest image
       shell: 'docker compose pull'
@@ -39,3 +44,9 @@
     
     - name: Prune docker system
       shell: 'docker system prune -f'
+
+  handlers:
+    - name: Restart SSH connection to affect group changes
+      ansible.builtin.meta:
+        reset_connection
+      listen: restart ssh
