@@ -2,7 +2,7 @@
 
 This repository contains automation of insfrastructure deployment for spring-petclinic app.
 
-All instances provided are run on Ubuntu 24 LTS.
+All instances provided run on Ubuntu 24 LTS.
 
 ## Tools used
 
@@ -10,6 +10,21 @@ All instances provided are run on Ubuntu 24 LTS.
 * Terraform - provide AWS infrastructure for app
 * Ansible - configure EC2 instances
 * Jenkins - integration server for infrastrucuture repository. Acts as Controller.
+
+<hr>
+
+## Directory structure
+
+* `ansible/` - contains playbooks and hosts file for:
+  
+  * installing dependencies (Docker - webservers, Java - Jenkins agent) - `install-dependencies.yml`
+  * configuring build agent service - `configure-petclinic-service.yml`
+
+* `terraform/` - contains backend configuration and modules for infrastructure (`compute/`, `database/`, `network/`)
+
+* `workstation-setup/` - setup script for workstation - installs: Docker, Terraform, AWS CLI and Ansible.
+
+* `Jenkinsfile` - pipeline for terraform infrastructure. Runs format, validation and Applies/Destroies infrastructure.
 
 <hr>
 
@@ -49,7 +64,7 @@ It can also test Terraform and Docker.
 
 Jenkins controller setted up manually in Default VPC as a part of workspace, with its own IP and opened ports: 22, 8080.
 
-Main objective of this server is to check, integrate Terraform infrastrcuture and **provide/destroy** it as manual job. Additionally it can act as controller for application buildserver (after further configuration).
+Main objective of this server is to check Terraform infrastrcuture and **provide/destroy** it as manual job. Additionally it acts as controller for application buildserver.
 
 #### Encountered problems
 
@@ -60,7 +75,7 @@ Main objective of this server is to check, integrate Terraform infrastrcuture an
     Steps I made to fix it:
 
     * install terraform on ec2 and point Jenkins to its binary installation folder.
-    * install aws cli on controll unit (it did not help at all).
+    * install aws cli on controll unit.
     * check if Jenkins sees credentials.
     * set enviroment variables inside Jenkins pipeline so every agent can use AWS credentials.
 
@@ -83,9 +98,9 @@ Main objective of this server is to check, integrate Terraform infrastrcuture an
 
 Terraform is used to provide infrastructure.
 
-Its files are stored in `terraform/` catalog and are splitted into modules (`network` - vpc, sec. groups, alb, etc.; `compute` - app VM, Jenkins VM; `database` - RDB for app).
+Its files are stored in `terraform/` catalog and are splitted into modules (`network` - vpc, sec. groups, alb, etc.; `compute` - app VM, Jenkins agent VM; `database` - RDB for app).
 
-Each modules uses variables specified by use (`network/variables.tf`) or given from other modules output (`compute`, `database`). They contain: ports, sec. group ids, subnet ids, AMI id, etc.
+Each modules uses variables specified in `terraform/module_name/variables.tf` or given from other modules output. They contain: ports, sec. group ids, subnet ids, AMI id, etc. Variables without default values are set in `terraform/main.tf`, other are setted with default values in each modules `variables.tf`. 
 
 #### Encountered problems
 
@@ -97,11 +112,10 @@ Each modules uses variables specified by use (`network/variables.tf`) or given f
 
 Ansible is used to configure EC2 app instances - install Docker on webservers and Java on buildserver. VM's have pulic IP address so Ansible can connect to them via SSH.
 
-Also it provides Jenkins Agent instance with configuration as agent with systemd service - `petclinic-cicd.service`.
+Also it provides Jenkins Agent with configuration as systemd service - `petclinic-cicd.service`.
 
 The `hosts.yml` needs to be changed according to given IP addreses in AWS Console. Only then one can provide instances with packages.
-
-No ansible roles where needed in my opinion - they were unnessesary complication for simple project.
+The `configure-petclinic-service.yml` also needs to be changed according to ones needs - IP of server and secret might change according to configuration.
 
 <hr>
 
@@ -111,7 +125,7 @@ No ansible roles where needed in my opinion - they were unnessesary complication
 
 Workstation is used to **install packages to targets with Ansible** and test given infrastructure.
 
-0. `scp` **public key** file into workstations `/home/ubuntu/.ssh server` (key is specified in /terraform/main.tf file, on default it its `mbocak_key`)
+0. `scp` **public key** file into workstations `/home/ubuntu/.ssh` (key is specified in /terraform/main.tf file, on default it its `mbocak_key_capstone`)
 1. Clone repository into workstation with
 
     ```bash
@@ -153,10 +167,10 @@ Workstation is used to **install packages to targets with Ansible** and test giv
 
     ```bash
     cd ./terraform
-    terraform init -backend-config=backend.tf
+    terraform init
     ```
 
-Ansible hosts needs to be configured according to given IP Addresses from AWS Contsole in `hosts.yml` file.
+8. Correct IP addresses of hosts according to given IP Addresses from AWS Contsole (server_a, server_b, jenkins_buildserver) in `hosts.yml` file.
 
 ### Setup Jenkins Controller
 
@@ -164,7 +178,7 @@ Provide EC2 instance in Default VPC and install Java and Jenkins accroding to [t
 
 It is used for integrating infrastructure code and deploying it to AWS, and as a Controller for application buildserver.
 
-1. Install according to tutorial on EC2 - Java, Jenkins, Terraform, AWS CLI
+1. Install according to tutorial on EC2 - Java, Jenkins, Terraform, AWS CLI.
 
 2. Install recommended plugins, set user, password, etc.
 
@@ -176,13 +190,13 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
     * SSH Key (aws-key) - for connecting to workstation and use ansible to redeploy application
     * workstation IP (workstation-ip) - for secure access to workstation punlic IP address from manual job
 
-4. Setup Gradle tool (version 8.7 with name "8.7")
+4. Setup Gradle tool (version 8.7 with name "8.7").
 
-5. Add GitHub webhook to infrastructure repository.
+5. Add GitHub webhooks to infrastructure and application repository.
 
 6. Add multibranch pipeline project with GitHub **with tags dicovering** project and SCM pipeline for *spring-petclinic application*.
 
-7. Add pipeline project with GitHub and SCM pipeline for *spring-petclinic-infrastructure* repository
+7. Add pipeline project with GitHub and SCM pipeline for *spring-petclinic-infrastructure* repository.
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
@@ -193,27 +207,22 @@ There are some sample variables. User needs to input correct IP address and secr
 
 ## Setup application infrastructure
 
-1. Add correct IP addreses to `hosts.yml` and push them to repository
-2. Inside workstation: Change IP and secret (and other default variables) in `configure-petclinic-service.yml` inside `ansible/playbooks`
-3. Inside workstation: Install reqiured packages with Ansible
+1. Inside workstation: Add correct IP addreses to `hosts.yml`.
+2. Inside workstation: Change IP and secret in `configure-petclinic-service.yml` inside `ansible/playbooks`.
+3. Inside workstation: Run playbook for configuring application and agent.
 
     ```bash
     cd spring-petclinic-infrastructure/ansible
-    ansible-playbook playbooks/install-dependencies.yml
+    ansible-playbook playbooks/setup.yml
     ```
 
-    Note: Before using ansible copy ID to hosts with `ssh-copy-id`
+    `setup.yml` combines playbooks:
+    * install-dependencies.yml - installs docker on webservers and java on build agent.
+    * `configure-petclinic-service.yml` - configures and enables build agent service for connecting to Jenkins controller.
 
-4. Inside workstation: Configure petclinic service for Jenkins Agent
+    Note: Before using ansible copy ID to hosts with `ssh-copy-id`.
 
-    ```bash
-    cd spring-petclinic-infrastructure/ansible
-    ansible-playbook playbooks/configure-petclinic-service.yml
-    ```
-
-5. Add GitHub webhook to spring-petclinic repository
-
-6. Deploy app infrastructure from Manual job inside Jenkins Controller - check *spring-petclinic application* README
+4. Deploy app infrastructure from Manual job inside Jenkins Controller - check *spring-petclinic application* README.
 
 ### Redeploy application
 
