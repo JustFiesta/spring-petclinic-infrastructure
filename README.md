@@ -150,11 +150,12 @@ Workstation is used to **install packages to targets with Ansible** and test giv
     sudo ./setup.sh
     ```
 
-5. Export Terraform enviroment variables
+5. Export Terraform and RDS enviroment variables
 
     ```bash
     export TF_VAR_aws_access_key=<access_key_value>
     export TF_VAR_aws_secret_key=<secret_key_value>
+    export RDS_DB=<RDS_endpoint>
     ```
 
 6. Configure AWS CLI
@@ -197,6 +198,8 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 6. Add multibranch pipeline project with GitHub **with tags dicovering** project and SCM pipeline for *spring-petclinic application*.
 
 7. Add pipeline project with GitHub and SCM pipeline for *spring-petclinic-infrastructure* repository.
+
+8. Add new node with correct label - ``
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 

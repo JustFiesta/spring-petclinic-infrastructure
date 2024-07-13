@@ -1,12 +1,12 @@
 ---
-- hosts: webservers
+- hosts: all
   become: yes
   tasks:
     - name: Update apt cache
       apt:
         update_cache: yes
 
-    - name: Install dependencies for Docker - webservers
+    - name: Install dependencies for Docker - all
       apt:
         name: 
           - ca-certificates
