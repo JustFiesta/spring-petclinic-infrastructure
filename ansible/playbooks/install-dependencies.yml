@@ -6,7 +6,7 @@
       apt:
         update_cache: yes
 
-    - name: Install dependencies - Docker - webservers
+    - name: Install dependencies for Docker - webservers
       apt:
         name: 
           - ca-certificates
@@ -47,9 +47,7 @@
         name: '{{ ansible_user }}'
         groups: docker
         append: yes
-
-    - name: Run newgrp command to affect group changes
-      shell: newgrp docker
+      notify: restart ssh
   
   handlers:
     - name: Start and enable Docker service
@@ -58,6 +56,11 @@
         state: restarted
         enabled: yes
       listen: restart docker
+
+    - name: Restart SSH connection to affect group changes
+      ansible.builtin.meta:
+        reset_connection
+      listen: restart ssh
 
 - hosts: buildservers
   become: yes
