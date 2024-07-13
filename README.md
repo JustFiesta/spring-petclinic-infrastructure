@@ -226,7 +226,7 @@ There are some sample variables. User needs to input correct IP address and secr
 
 ## Setup application infrastructure (2 webservers, Jenkins agent)
 
-1. Inside workstation: Add correct IP addreses to `hosts.yml`.
+1. Add correct IP addreses to `hosts.yml` and push it to repository (for Jenkins checkout).
 2. Inside workstation: Change IP and secret in `configure-petclinic-service.yml` inside `ansible/playbooks`.
 3. Inside workstation: Run playbook for configuring application and agent.
 
