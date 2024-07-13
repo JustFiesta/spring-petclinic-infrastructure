@@ -94,6 +94,20 @@ Main objective of this server is to check Terraform infrastrcuture and **provide
 
     Had to change parameters layout a bit, so neither `Apply` or `Destroy` are taken first.
 
+### Jenkins Agent
+
+Jenkins agent is provided with Terraform as EC2 instance with Docker and Java installed via Ansible. It is used to run application pipeline.
+
+Has public IP.
+Ports opened: 22
+
+### Application webservers
+
+Webservers are provided with Terraform as EC2 instances with Docker installed via Ansible. They are used as targets for Application Load Balancer (default `capstone-alb`).
+
+Have public IPs.
+Ports opened: 22, 80
+
 ### Infrastructure provisioning (Terraform)
 
 Terraform is used to provide infrastructure.
@@ -116,6 +130,8 @@ Also it provides Jenkins Agent with configuration as systemd service - `petclini
 
 The `hosts.yml` needs to be changed according to given IP addreses in AWS Console. Only then one can provide instances with packages.
 The `configure-petclinic-service.yml` also needs to be changed according to ones needs - IP of server and secret might change according to configuration.
+
+
 
 <hr>
 
@@ -208,7 +224,7 @@ There are some sample variables. User needs to input correct IP address and secr
 
 <hr>
 
-## Setup application infrastructure
+## Setup application infrastructure (2 webservers, Jenkins agent)
 
 1. Inside workstation: Add correct IP addreses to `hosts.yml`.
 2. Inside workstation: Change IP and secret in `configure-petclinic-service.yml` inside `ansible/playbooks`.
