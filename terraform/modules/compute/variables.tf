@@ -28,11 +28,6 @@ variable "ssh_sec_group" {
   type        = string
 }
 
-variable "jenkins_sec_group" {
-  description = "Jenkins security group ID"
-  type        = string
-}
-
 variable "alb_port" {
     type    = number
     default = 80
