@@ -24,9 +24,6 @@
         create: yes
       notify: restart ssh
 
-    # - name: Source /etc/environment to apply RDS_DB on hosts
-    #   ansible.builtin.shell: "bash -c 'source /etc/environment && echo $RDS_DB'"
-
     - name: Pull newest image
       shell: 'docker compose pull'
       args:
