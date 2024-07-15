@@ -227,8 +227,16 @@ There are some sample variables. User needs to input correct IP address and secr
 
 ## Setup application infrastructure (2 webservers, Jenkins agent)
 
-1. Add correct IP addreses to `hosts.yml` and push it to repository (for Jenkins checkout).
-2. Inside workstation: Change IP and secret in `configure-petclinic-service.yml` inside `ansible/playbooks`.
+1. Add correct IP addreses to `hosts.yml` and push it to repository.
+2. Inside workstation: set enviroment variables for RDS endpoint and Jenkins agent
+
+    ```bash
+    su
+    echo RDS_DB=rds-name.somestring.eu-west-1.rds.amazonaws.com >> /etc/environment
+    echo JENKINS_URL=http://X.X.X.X:8080 >> /etc/environment
+    echo JENKINS_SECRET=some_secret_text_1234567890 >> /etc/environment
+    ```
+
 3. Inside workstation: Run playbook for configuring application and agent.
 
     ```bash
@@ -241,8 +249,8 @@ There are some sample variables. User needs to input correct IP address and secr
     * `configure-petclinic-service.yml` - configures and enables build agent service for connecting to Jenkins controller.
 
     Note: Before using ansible copy ID to hosts with `ssh-copy-id`.
-4. Inside workstation: Export correct RDS endpoint with `su` and `echo RDS_DB=rds-name.somestring.eu-west-1.rds.amazonaws.com >> /etc/environment` (to get this endpoint use AWS CLI or AWS Console)
-5. Deploy app infrastructure from Manual job inside Jenkins Controller - check *spring-petclinic application* README.
+
+4. Deploy app infrastructure from Manual job inside Jenkins Controller - check *spring-petclinic application* README.
 
 ### Deploy application
 
