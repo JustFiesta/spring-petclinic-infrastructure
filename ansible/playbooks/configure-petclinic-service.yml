@@ -4,8 +4,8 @@
   become: yes
 
   vars:
-    jenkins_url: "http://3.255.221.193:8080"
-    jenkins_secret: "some_secret_text_1234567890"
+    jenkins_url: "{{ lookup('env', 'JENKINS_URL') }}"
+    jenkins_secret: "{{ lookup('env', 'JENKINS_SECRET') }}"
     jenkins_agent_name: "petclinic-cicd"
     jenkins_agent_workdir: "/usr/local/jenkins-service"
 
