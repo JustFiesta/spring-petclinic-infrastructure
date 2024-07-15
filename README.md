@@ -235,6 +235,7 @@ There are some sample variables. User needs to input correct IP address and secr
     echo RDS_DB=rds-name.somestring.eu-west-1.rds.amazonaws.com >> /etc/environment
     echo JENKINS_URL=http://X.X.X.X:8080 >> /etc/environment
     echo JENKINS_SECRET=some_secret_text_1234567890 >> /etc/environment
+    source /etc/environment
     ```
 
 3. Inside workstation: Run playbook for configuring application and agent.
