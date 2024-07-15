@@ -171,7 +171,8 @@ Workstation is used to **install packages to targets with Ansible** and test giv
     ```bash
     export TF_VAR_aws_access_key=<access_key_value>
     export TF_VAR_aws_secret_key=<secret_key_value>
-    export RDS_DB=<RDS_endpoint>
+    sudo su 
+    # echo RDS_DB=<RDS_endpoint> >> /etc/environment
     ```
 
 6. Configure AWS CLI
@@ -211,11 +212,11 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 
 5. Add GitHub webhooks to infrastructure and application repository.
 
-6. Add multibranch pipeline project with GitHub **with tags dicovering** project and SCM pipeline for *spring-petclinic application*.
+6. Add multibranch pipeline project with GitHub project and SCM pipeline for *spring-petclinic application*.
 
 7. Add pipeline project with GitHub and SCM pipeline for *spring-petclinic-infrastructure* repository.
 
-8. Add new node with correct label - ``
+8. Add new node with correct label: `petclinic-cicd`
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
@@ -236,14 +237,14 @@ There are some sample variables. User needs to input correct IP address and secr
     ```
 
     `setup.yml` combines playbooks:
-    * install-dependencies.yml - installs docker on webservers and java on build agent.
+    * `install-dependencies.yml` - installs docker on all hosts and java on build agent.
     * `configure-petclinic-service.yml` - configures and enables build agent service for connecting to Jenkins controller.
 
     Note: Before using ansible copy ID to hosts with `ssh-copy-id`.
+4. Inside workstation: Export correct RDS endpoint with `su` and `echo RDS_DB=rds-name.somestring.eu-west-1.rds.amazonaws.com >> /etc/environment` (to get this endpoint use AWS CLI or AWS Console)
+5. Deploy app infrastructure from Manual job inside Jenkins Controller - check *spring-petclinic application* README.
 
-4. Deploy app infrastructure from Manual job inside Jenkins Controller - check *spring-petclinic application* README.
-
-### Redeploy application
+### Deploy application
 
 Application is redeploied via manual Job, which uses Ansible from Workstation to redeploy docker containers - check *spring-petclinic* application README, section Deployment.
 
