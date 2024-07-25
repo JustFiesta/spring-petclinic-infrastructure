@@ -62,7 +62,7 @@ It can also test Terraform and Docker.
 
 ### Jenkins Controller
 
-Jenkins controller setted up manually in Default VPC as a part of workspace, with its own IP and opened ports: 22, 8080.
+Jenkins controller setted up manually in Default VPC as a part of workspace, with its own IP and opened ports: 22, 8080, *8081* (Jenkins agent endpoint).
 
 Main objective of this server is to check Terraform infrastrcuture and **provide/destroy** it as manual job. Additionally it acts as controller for application buildserver.
 
@@ -114,7 +114,7 @@ Terraform is used to provide infrastructure.
 
 Its files are stored in `terraform/` catalog and are splitted into modules (`network` - vpc, sec. groups, alb, etc.; `compute` - app VM, Jenkins agent VM; `database` - RDB for app).
 
-Each modules uses variables specified in `terraform/module_name/variables.tf` or given from other modules output. They contain: ports, sec. group ids, subnet ids, AMI id, etc. Variables without default values are set in `terraform/main.tf`, other are setted with default values in each modules `variables.tf`. 
+Each modules uses variables specified in `terraform/module_name/variables.tf` or given from other modules output. They contain: ports, sec. group ids, subnet ids, AMI id, etc. Variables without default values are set in `terraform/main.tf`, other are setted with default values in each modules `variables.tf`.
 
 #### Encountered problems
 
@@ -130,8 +130,6 @@ Also it provides Jenkins Agent with configuration as systemd service - `petclini
 
 The `hosts.yml` needs to be changed according to given IP addreses in AWS Console. Only then one can provide instances with packages.
 The `configure-petclinic-service.yml` also needs to be changed according to ones needs - IP of server and secret might change according to configuration.
-
-
 
 <hr>
 
@@ -166,13 +164,11 @@ Workstation is used to **install packages to targets with Ansible** and test giv
     sudo ./setup.sh
     ```
 
-5. Export Terraform and RDS enviroment variables
+5. Export Terraform enviroment variables
 
     ```bash
     export TF_VAR_aws_access_key=<access_key_value>
     export TF_VAR_aws_secret_key=<secret_key_value>
-    sudo su 
-    # echo RDS_DB=<RDS_endpoint> >> /etc/environment
     ```
 
 6. Configure AWS CLI
@@ -198,30 +194,34 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
 
 1. Install according to tutorial on EC2 - Java, Jenkins, Terraform, AWS CLI.
 
-2. Install recommended plugins, set user, password, etc.
+2. Install recommended plugins + *AWS Credentials plugin*, set user, password, etc.
 
 3. Setup credentials for:
 
     * Dockerhub (docker-cred) - Docker Hub credentials
     * GitHub (github-cred) - GitHub credentials for account where both repositories reside
-    * AWS (mbocak-credentials) - access keys for AWS account
+    * AWS (mbocak-credentials) - access keys for AWS account *ADD IT AS AWS CREDENTIALS*
     * SSH Key (aws-key) - for connecting to workstation and use ansible to redeploy application
     * workstation IP (workstation-ip) - for secure access to workstation punlic IP address from manual job
 
 4. Setup Gradle tool (version 8.7 with name "8.7").
 
-5. Add GitHub webhooks to infrastructure and application repository.
+5. Add GitHub webhooks to infrastructure and application repository (`http://jenkins_IP:8080/github-webhook/`).
 
 6. Add multibranch pipeline project with GitHub project and SCM pipeline for *spring-petclinic application*.
 
 7. Add pipeline project with GitHub and SCM pipeline for *spring-petclinic-infrastructure* repository.
 
-8. Add new node with correct label: `petclinic-cicd`
+8. In Jenkins controller go to Menage Jenkins > Security and set TCP port for inbound agents to: 8081
+
+9. Add new node with correct label: `petclinic`, and remote file system: `/home/ubuntu/jenkins-agent`
+
+    One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `configure-petclinic-service.yml` inside `ansible/playbooks/`.
+    There are some sample variables. User needs to input correct IP address and secret from Jenkins Controller, other are optional.
+
+10. To main Build node add label: `aws` so it can display application link using configured AWS CLI
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
-
-One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `configure-petclinic-service.yml` inside `ansible/playbooks/`.
-There are some sample variables. User needs to input correct IP address and secret from Jenkins Controller, other are optional.
 
 <hr>
 
