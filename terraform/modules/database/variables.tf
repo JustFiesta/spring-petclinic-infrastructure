@@ -26,5 +26,5 @@ variable "db_subnet_group" {
 }
 
 variable "rdb_subnet_name" {
-    type        = string
+  type = string
 }

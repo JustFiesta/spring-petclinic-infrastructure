@@ -29,7 +29,7 @@ pipeline {
         stage('Terraform format') {
             steps {
                 dir('terraform') {
-                    sh 'terraform fmt -no-color'
+                    sh 'terraform fmt -no-color -recursive'
                 }
             }
         }
