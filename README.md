@@ -139,7 +139,7 @@ The `configure-petclinic-service.yml` also needs to be changed according to ones
 
 Workstation is used to **install packages to targets with Ansible** and test given infrastructure.
 
-0. `scp` **public key** file into workstations `/home/ubuntu/.ssh` (key is specified in /terraform/main.tf file, on default it its `mbocak_key_capstone`)
+0. `scp` **public key** file into Workstation at `/home/ubuntu/.ssh` (key is specified in /terraform/main.tf file, on default it its `mbocak_key_capstone`)
 1. Clone repository into workstation with
 
     ```bash
