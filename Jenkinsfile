@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'build' } 
 
     environment {
         AWS_DEFAULT_REGION="eu-west-1"
