@@ -219,7 +219,7 @@ It is used for integrating infrastructure code and deploying it to AWS, and as a
     One also needs to add Agent with commands given in Jenkins panel. Agent should be added in `configure-petclinic-service.yml` inside `ansible/playbooks/`.
     There are some sample variables. User needs to input correct IP address and secret from Jenkins Controller, other are optional.
 
-10. To main Build node add label: `aws` so it can display application link using configured AWS CLI
+10. To main Build node add labels: `aws`, `build` so it can display application link using configured AWS CLI and run job for provisioning infrastructure
 
 After this configuration code can be automaticlly: formatted, valdiated. One can Apply/Destory infrastructure with manual job in Jenkins Controller.
 
