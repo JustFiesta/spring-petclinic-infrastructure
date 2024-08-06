@@ -9,7 +9,7 @@ resource "aws_instance" "app_server_a" {
   depends_on = [aws_instance.jenkins]
 
   tags = {
-    Name = "capstone_project_app_a"
+    Name = "webserver_a"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_instance" "app_server_b" {
   depends_on = [aws_instance.jenkins]
 
   tags = {
-    Name = "capstone_project_app_b"
+    Name = "webserver_b"
   }
 }
 
